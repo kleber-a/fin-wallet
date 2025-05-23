@@ -15,12 +15,11 @@ export default async function History() {
     }
     
     return (
-        <DashboardNav>
+        <div className="flex flex-col gap-10">
             <HeaderDashBoard heading="Histórico de Transações" text="Visualize todas as suas transações" /> 
             <div className="overflow-auto">
-
                 <Table user={session.user} />
             </div>
-        </DashboardNav>
+        </div>
     )
 }

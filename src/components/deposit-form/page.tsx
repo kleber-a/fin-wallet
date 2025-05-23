@@ -65,7 +65,7 @@ export default function DepositForm({ user }: { user: any }) {
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
-      className="max-w-md mx-auto rounded-md border p-6 shadow-md bg-white"
+      className="w-[100px] min-w-[320px] sm:w-[400px] max-w-md mx-auto rounded-md border p-6 shadow-md bg-white"
     >
       <Input
         label="Valor do depósito (R$)"

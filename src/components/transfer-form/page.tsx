@@ -6,7 +6,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { getUser } from "@/services/userService";
 import { api } from "@/lib/api";
-import { SplinePointerIcon } from "lucide-react";
+import { Loader2, SplinePointerIcon } from "lucide-react";
 import toast from "react-hot-toast";
 
 export const createTransferSchema = (saldoDisponivel: number) =>
@@ -107,7 +107,7 @@ export default function TransferForm({ user }: { user: any }) {
     if (loading) {
         return (
             <div className="flex justify-center items-center h-48">
-                <SplinePointerIcon size="large" />
+                <Loader2 className="animate-spin text-amber-400 w-12 h-12" />
             </div>
         );
     }
@@ -115,7 +115,7 @@ export default function TransferForm({ user }: { user: any }) {
     return (
         <form
             onSubmit={handleSubmit(onSubmit)}
-            className="max-w-md mx-auto rounded-md border p-6 shadow-md bg-white"
+            className="w-[100px] min-w-[320px] sm:w-[400px] max-w-md mx-auto rounded-md border p-6 shadow-md bg-white"
         >
             {/* Destinatário */}
             <label htmlFor="destinatario" className="block mb-2 font-medium">
@@ -124,29 +124,30 @@ export default function TransferForm({ user }: { user: any }) {
             <select
                 id="destinatario"
                 {...register("destinatario")}
-                className={`w-full rounded border px-3 py-2 mb-4 focus:outline-none focus:ring-2 focus:ring-green-500 appearance-none pr-8 relative ${errors.destinatario ? "border-red-500" : ""
+                className={`w-full rounded border px-3 py-2 mb-1 focus:outline-none focus:ring-2 focus:ring-green-500 appearance-none pr-8 relative ${errors.destinatario ? "border-red-500" : ""
                     }`}
                 style={{
                     backgroundImage: `url("data:image/svg+xml;utf8,<svg fill='gray' height='24' viewBox='0 0 24 24' width='24' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/></svg>")`,
-                    backgroundRepeat: 'no-repeat',
-                    backgroundPosition: 'right 0.5rem center',
-                    backgroundSize: '1rem'
+                    backgroundRepeat: "no-repeat",
+                    backgroundPosition: "right 0.5rem center",
+                    backgroundSize: "1rem",
                 }}
                 defaultValue=""
             >
                 <option value="" disabled>
                     Selecione o destinatário
                 </option>
-                {otherUsers && otherUsers.map((d, index) => (
-                    <option key={index} value={d.email}>
-                        {d.email}
-                    </option>
-                ))}
+                {otherUsers &&
+                    otherUsers.map((d, index) => (
+                        <option key={index} value={d.email}>
+                            {d.email}
+                        </option>
+                    ))}
             </select>
-            {errors.destinatario && (
-                <p className="text-red-500 text-sm mb-4">{errors.destinatario.message}</p>
-            )}
-
+            {/* Espaço reservado para mensagem de erro */}
+            <p className="text-red-500 text-sm min-h-[1.25rem]">
+                {errors.destinatario ? errors.destinatario.message : "\u00A0"}
+            </p>
             {/* Valor da Transferência */}
             <Input
                 label="Valor da Transferência (R$)"

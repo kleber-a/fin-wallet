@@ -10,17 +10,15 @@ export default async function Deposit() {
     const session = await getServerSession(authOptions);
 
 
-    if(!session || !session.user) {
+    if (!session || !session.user) {
         redirect("/")
     }
 
 
     return (
-        <DashboardNav>
-
-            <HeaderDashBoard heading="Depositar" text="Adicione saldo à sua carteira" /> 
+        <div className="flex flex-col gap-10">
+            <HeaderDashBoard heading="Depositar" text="Adicione saldo à sua carteira" />
             <DepositForm user={session.user} />
-
-        </DashboardNav>
+        </div>
     )
 }

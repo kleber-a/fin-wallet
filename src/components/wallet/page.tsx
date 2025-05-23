@@ -5,7 +5,12 @@ import { useEffect, useState } from "react";
 import { Loader2 } from "lucide-react";
 import { getUser } from "@/services/userService";
 
-
+function formatCurrency(value: number) {
+  return new Intl.NumberFormat("pt-BR", {
+    style: "currency",
+    currency: "BRL",
+  }).format(value);
+}
 
 export default function Wallet({ user }: { user: any }) {
   const [myUser, setMyUser] = useState<any>(null);
@@ -29,14 +34,14 @@ export default function Wallet({ user }: { user: any }) {
   }, [user.email]);
 
   return (
-    <section className="rounded-md border border-amber-400 bg-white p-4 shadow-sm">
+ <section className="rounded-md border border-amber-400 bg-white p-4 shadow-sm w-full md:w-auto">
       <h3 className="text-sm font-medium text-black">Saldo Disponível</h3>
 
       <div className="mt-2 text-4xl font-bold text-green-600 min-h-[48px] flex items-center justify-center">
         {loading ? (
           <Loader2 className="animate-spin text-amber-400 w-8 h-8" />
         ) : myUser?.wallet !== undefined ? (
-          `R$ ${myUser.wallet}`
+          `R$ ${formatCurrency(myUser.wallet)}`
         ) : (
           <span className="text-gray-400 text-base">Nenhum saldo disponível</span>
         )}

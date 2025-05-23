@@ -1,12 +1,13 @@
 import Footer from "@/components/footer/page";
 import Header from "@/components/header/page";
+import { Banknote, RotateCcw, Send } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 
 export default function Home() {
   return (
     <div className="flex flex-col min-h-screen">
-      
+
       <main className="flex-1">
         {/* Hero Section */}
         <section className="w-full py-16 md:py-28 lg:py-36 xl:py-48 bg-white flex justify-center">
@@ -83,11 +84,12 @@ export default function Home() {
               </div>
             </div>
 
+
             <div className="mx-auto grid max-w-6xl grid-cols-1 gap-8 py-12 md:grid-cols-3">
-              {/* Card */}
+              {/* Card 1 */}
               <div className="flex flex-col items-center space-y-3 rounded-2xl bg-white p-6 shadow-md hover:shadow-lg transition-all">
                 <div className="rounded-full bg-green-100 p-4">
-                  {/* Ícone */}
+                  <Banknote className="h-8 w-8 text-green-600" />
                 </div>
                 <h3 className="text-xl font-semibold">Depósitos Fáceis</h3>
                 <p className="text-center text-gray-500">
@@ -95,9 +97,10 @@ export default function Home() {
                 </p>
               </div>
 
+              {/* Card 2 */}
               <div className="flex flex-col items-center space-y-3 rounded-2xl bg-white p-6 shadow-md hover:shadow-lg transition-all">
                 <div className="rounded-full bg-green-100 p-4">
-                  {/* Ícone */}
+                  <Send className="h-8 w-8 text-green-600" />
                 </div>
                 <h3 className="text-xl font-semibold">Transferências Instantâneas</h3>
                 <p className="text-center text-gray-500">
@@ -105,9 +108,10 @@ export default function Home() {
                 </p>
               </div>
 
+              {/* Card 3 */}
               <div className="flex flex-col items-center space-y-3 rounded-2xl bg-white p-6 shadow-md hover:shadow-lg transition-all">
                 <div className="rounded-full bg-green-100 p-4">
-                  {/* Ícone */}
+                  <RotateCcw className="h-8 w-8 text-green-600" />
                 </div>
                 <h3 className="text-xl font-semibold">Reversão de Operações</h3>
                 <p className="text-center text-gray-500">
@@ -115,6 +119,7 @@ export default function Home() {
                 </p>
               </div>
             </div>
+
           </div>
         </section>
       </main>
