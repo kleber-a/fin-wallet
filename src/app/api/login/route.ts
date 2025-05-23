@@ -20,7 +20,6 @@ export async function POST(request: Request) {
 
     // Compara a senha em texto com o hash armazenado
     const isPasswordValid = await bcrypt.compare(password, user.password);
-
      if (!isPasswordValid) {
       return NextResponse.json({ error: "Senha inválida" }, { status: 401 });
     }
@@ -37,7 +36,13 @@ export async function POST(request: Request) {
       { expiresIn: "1h" }
     );
 
-    return NextResponse.json({ token });
+    // return NextResponse.json({ token });
+    return NextResponse.json({ 
+      id: user._id.toString(),
+      email: user.email,
+      name: user.name || user.email,
+      token
+     });
 
   } catch (error) {
     console.error(error);

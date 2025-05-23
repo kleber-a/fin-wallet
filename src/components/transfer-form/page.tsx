@@ -1,33 +1,120 @@
 "use client"
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { z } from "zod";
+import Input from "../input/page";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { getUser } from "@/services/userService";
+import { api } from "@/lib/api";
+import { SplinePointerIcon } from "lucide-react";
+import toast from "react-hot-toast";
 
-export default function TransferForm() {
+export const createTransferSchema = (saldoDisponivel: number) =>
+    z.object({
+        destinatario: z.string().min(1, "Selecione um destinatário"),
+        valor: z
+            .string()
+            .refine(val => {
+                const n = Number(val.replace(",", "."));
+                return !isNaN(n) && n > 0;
+            }, "Valor deve ser um número positivo")
+            .refine(val => {
+                const n = Number(val.replace(",", "."));
+                return n <= saldoDisponivel;
+            }, "Saldo insuficiente"),
+        descricao: z
+            .string()
+            .max(100, "Descrição pode ter no máximo 100 caracteres")
+            .optional(),
+    });
 
-    const [destinatario, setDestinatario] = useState("");
-    const [valor, setValor] = useState("");
-    const [descricao, setDescricao] = useState("");
+const transferSchema = createTransferSchema(0);
 
-    // Exemplo de destinatários para o select
-    const destinatarios = [
-        { id: "1", nome: "João Silva" },
-        { id: "2", nome: "Maria Oliveira" },
-        { id: "3", nome: "Empresa X" },
-    ];
+type TransferFormData = z.infer<typeof transferSchema>;
 
-    const saldoDisponivel = 1000;
 
-    const handleSubmit = (e: React.FormEvent) => {
-        e.preventDefault();
-        // Aqui você pode colocar a lógica de envio, validação, etc.
-        alert(
-            `Transferindo R$ ${valor} para ${destinatario}${descricao ? " com descrição: " + descricao : ""
-            }`
-        );
+interface User {
+    email: string;
+    name: string;
+    wallet: number;
+    _id: string;
+}
+
+export default function TransferForm({ user }: { user: any }) {
+
+    const [myUser, setMyUser] = useState<User | null>(null)
+    const [otherUsers, setOtherUsers] = useState<User[]>([])
+    const [loading, setLoading] = useState<boolean>(true);
+
+    useEffect(() => {
+        const getUsers = async () => {
+            try {
+
+                setLoading(true);
+                const UsersData = await getUser(user.email);
+                setMyUser(UsersData?.user)
+                setOtherUsers(UsersData?.users)
+
+                setLoading(false);
+            } catch (error) {
+                toast.error("Erro ao carregar usuários");
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        getUsers();
+    }, [])
+
+    const {
+        register,
+        handleSubmit,
+        formState: { errors },
+        reset
+    } = useForm<TransferFormData>({
+        resolver: zodResolver(createTransferSchema(myUser?.wallet ?? 0)),
+        mode: "onBlur",
+    });
+
+    const onSubmit = async (data: TransferFormData) => {
+        toast(`Transferindo R$ ${data.valor} para ${data.destinatario}${data.descricao}`);
+
+        setLoading(true);
+        try {
+            await api.post("/api/transfer", {
+                toEmail: data.destinatario,
+                amount: data.valor,
+                description: data.descricao,
+            });
+
+
+            // Busca o usuário atualizado
+            const updatedUserResponse = await getUser(user.email);
+            setMyUser(updatedUserResponse?.user);
+
+            toast.success('Transferência realizada')
+
+
+            reset();
+        } catch (error) {
+            toast.success('Ocorreu um erro ao realizar transferência')
+        } finally {
+            setLoading(false);
+        }
+
     };
+
+    if (loading) {
+        return (
+            <div className="flex justify-center items-center h-48">
+                <SplinePointerIcon size="large" />
+            </div>
+        );
+    }
 
     return (
         <form
-            onSubmit={handleSubmit}
+            onSubmit={handleSubmit(onSubmit)}
             className="max-w-md mx-auto rounded-md border p-6 shadow-md bg-white"
         >
             {/* Destinatário */}
@@ -36,54 +123,50 @@ export default function TransferForm() {
             </label>
             <select
                 id="destinatario"
-                required
-                value={destinatario}
-                onChange={(e) => setDestinatario(e.target.value)}
-                className="w-full rounded border px-3 py-2 mb-4 focus:outline-none focus:ring-2 focus:ring-green-500 appearance-none pr-8 relative"
+                {...register("destinatario")}
+                className={`w-full rounded border px-3 py-2 mb-4 focus:outline-none focus:ring-2 focus:ring-green-500 appearance-none pr-8 relative ${errors.destinatario ? "border-red-500" : ""
+                    }`}
                 style={{
                     backgroundImage: `url("data:image/svg+xml;utf8,<svg fill='gray' height='24' viewBox='0 0 24 24' width='24' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/></svg>")`,
                     backgroundRepeat: 'no-repeat',
                     backgroundPosition: 'right 0.5rem center',
                     backgroundSize: '1rem'
                 }}
+                defaultValue=""
             >
                 <option value="" disabled>
                     Selecione o destinatário
                 </option>
-                {destinatarios.map((d) => (
-                    <option key={d.id} value={d.nome}>
-                        {d.nome}
+                {otherUsers && otherUsers.map((d, index) => (
+                    <option key={index} value={d.email}>
+                        {d.email}
                     </option>
                 ))}
             </select>
+            {errors.destinatario && (
+                <p className="text-red-500 text-sm mb-4">{errors.destinatario.message}</p>
+            )}
 
             {/* Valor da Transferência */}
-            <label htmlFor="valor" className="block mb-2 font-medium">
-                Valor da Transferência (R$)
-            </label>
-            <input
-                id="valor"
-                type="number"
-                min="0"
-                step="0.01"
-                required
-                value={valor}
-                onChange={(e) => setValor(e.target.value)}
+            <Input
+                label="Valor da Transferência (R$)"
+                type="text"
                 placeholder="0,00"
-                className="w-full rounded border px-3 py-2 mb-4 focus:outline-none focus:ring-2 focus:ring-green-500"
+                name="valor"
+                register={register}
+                error={errors.valor?.message}
+                rules={{ required: true }}
             />
 
             {/* Descrição (opcional) */}
-            <label htmlFor="descricao" className="block mb-2 font-medium">
-                Descrição (opcional)
-            </label>
-            <input
-                id="descricao"
+            <Input
+                label="Descrição (opcional)"
                 type="text"
-                value={descricao}
-                onChange={(e) => setDescricao(e.target.value)}
                 placeholder="Descrição da transferência"
-                className="w-full rounded border px-3 py-2 mb-6 focus:outline-none focus:ring-2 focus:ring-green-500"
+                name="descricao"
+                register={register}
+                error={errors.descricao?.message}
+                rules={{ maxLength: 100 }}
             />
 
             {/* Botão Transferir */}
@@ -98,9 +181,9 @@ export default function TransferForm() {
             <p className="mt-4 text-center text-gray-600">
                 Saldo Disponível:{" "}
                 <span className="font-bold text-green-700">
-                    R$ {saldoDisponivel.toFixed(2).replace(".", ",")}
+                    R$ {myUser?.wallet.toFixed(2).replace(".", ",")}
                 </span>
             </p>
         </form>
-    )
+    );
 }

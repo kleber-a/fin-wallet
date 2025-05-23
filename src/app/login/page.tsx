@@ -2,18 +2,19 @@
 // import { createServerClient } from "@/lib/supabase-server"
 // import { redirect } from "next/navigation"
 import LoginForm from "@/components/login-form/page"
+import { authOptions } from "@/lib/auth";
+import { getServerSession } from "next-auth";
 import Link from "next/link"
+import { redirect } from "next/navigation";
 // import { Wallet } from "lucide-react"
 
 export default async function LoginPage() {
-//   const supabase = createServerClient()
-//   const {
-//     data: { session },
-//   } = await supabase.auth.getSession()
+ const session = await getServerSession(authOptions);
 
-//   if (session) {
-//     redirect("/dashboard")
-//   }
+
+    if(session && session.user) {
+        redirect("/dashboard")
+    }
 
   return (
     <div className="flex min-h-screen flex-col items-center justify-center bg-gray-50 p-4">

@@ -2,9 +2,19 @@
 import { redirect } from "next/navigation"
 import Link from "next/link"
 import { RegisterForm } from "@/components/register-form/page"
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/lib/auth";
 
 
 export default async function RegisterPage() {
+
+  const session = await getServerSession(authOptions);
+
+
+    if(session && session.user) {
+        redirect("/dashboard")
+    }
+
 
   return (
     <div className="flex min-h-screen flex-col items-center justify-center bg-gray-50 p-4">

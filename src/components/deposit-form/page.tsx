@@ -1,57 +1,100 @@
-"use client"
+"use client";
+
+import { api } from "@/lib/api";
 import React, { useState } from "react";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import Input from "../input/page";
+import { redirect } from "next/navigation";
+import { useRouter } from "next/navigation";
+import toast from "react-hot-toast";
 
-export default function DepositForm() {
-  const [valor, setValor] = useState("");
-  const [descricao, setDescricao] = useState("");
+// Schema de validação
+const schema = z.object({
+  amount: z
+    .number({ invalid_type_error: "O valor deve ser um número válido." })
+    .min(0.01, "O valor do depósito deve ser maior que zero.")
+    .max(1000000, "O valor máximo de depósito é R$ 1.000.000,00."),
+  description: z
+    .string()
+    .max(200, "A descrição deve ter no máximo 200 caracteres.")
+    .optional(),
+});
 
-  const saldoDisponivel = 1000;
+type FormData = z.infer<typeof schema>;
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    // Aqui você pode colocar a lógica do envio do formulário
-    alert(`Depositando R$${valor} - ${descricao}`);
+export default function DepositForm({ user }: { user: any }) {
+    const router = useRouter();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    reset,
+  } = useForm<FormData>({
+    resolver: zodResolver(schema),
+    defaultValues: {
+      amount: 0,
+      description: "",
+    },
+  });
+
+  const [isLoading, setIsLoading] = useState(false);
+  
+
+  const onSubmit = async (data: FormData) => {
+    setIsLoading(true);
+    try {
+      await api.post("/api/deposit", {
+        email: user.email,
+        amount: data.amount,
+        description: data.description,
+      });
+
+      toast.success("Depósito efetuado!");
+      reset();
+      router.push("/dashboard");
+    } catch (error) {
+      console.error("Erro ao fazer depósito:", error);
+      toast.error("Ocorreu um erro ao tentar depositar.");
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
-    <form onSubmit={handleSubmit} className="max-w-md mx-auto rounded-md border p-6 shadow-md bg-white">
-      <label htmlFor="valor" className="block mb-1 font-medium">
-        Valor do depósito (R$)
-      </label>
-      <input
+    <form
+      onSubmit={handleSubmit(onSubmit)}
+      className="max-w-md mx-auto rounded-md border p-6 shadow-md bg-white"
+    >
+      <Input
+        label="Valor do depósito (R$)"
         type="number"
-        id="valor"
-        required
-        value={valor}
-        onChange={(e) => setValor(e.target.value)}
-        className="w-full rounded border px-3 py-2 mb-4 focus:outline-none focus:ring-2 focus:ring-green-500"
-        min="0"
-        step="0.01"
+        placeholder="Digite o valor"
+        name="amount"
+        register={register}
+        rules={{ valueAsNumber: true }}
+        error={errors.amount?.message}
       />
 
-      <label htmlFor="descricao" className="block mb-1 font-medium">
-        Descrição (opcional)
-      </label>
-      <input
+      <Input
+        label="Descrição (opcional)"
         type="text"
-        id="descricao"
-        value={descricao}
-        onChange={(e) => setDescricao(e.target.value)}
-        className="w-full rounded border px-3 py-2 mb-6 focus:outline-none focus:ring-2 focus:ring-green-500"
+        placeholder="Digite uma descrição"
+        name="description"
+        register={register}
+        error={errors.description?.message}
       />
 
       <button
         type="submit"
-        className="w-full bg-green-600 text-white py-2 rounded hover:bg-green-700 transition"
+        disabled={isLoading}
+        className={`w-full ${
+          isLoading ? "bg-gray-400 cursor-not-allowed" : "bg-green-600 hover:bg-green-700"
+        } text-white py-2 rounded transition`}
       >
-        Depositar
+        {isLoading ? "Processando..." : "Depositar"}
       </button>
-        <p className="mt-4 text-center text-gray-600">
-                Saldo Disponível:{" "}
-                <span className="font-bold text-green-700">
-                    R$ {saldoDisponivel.toFixed(2).replace(".", ",")}
-                </span>
-            </p>
     </form>
   );
 }
