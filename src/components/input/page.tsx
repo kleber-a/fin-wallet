@@ -1,16 +1,6 @@
 "use client"
 
-import { RegisterOptions, UseFormRegister } from "react-hook-form";
-
-interface InputProps {
-  type: string;
-  placeholder: string;
-  name: string;
-  label?: string;
-  register: UseFormRegister<any>;
-  error?: string;
-  rules?: RegisterOptions;
-}
+import { InputProps } from "@/types";
 
 export default function Input({
   name,
@@ -22,25 +12,8 @@ export default function Input({
   label,
 }: InputProps) {
   return (
-//   <div className="mb-4">
-//   {label && (
-//     <label htmlFor={name} className="block mb-1 font-medium">
-//       {label}
-//     </label>
-//   )}
-//   <input
-//     className="w-full border-2 rounded-md h-11 px-2 focus:outline-none focus:ring-2 focus:ring-green-500"
-//     placeholder={placeholder}
-//     type={type}
-//     {...register(name, rules)}
-//     id={name}
-//   />
-//   <p className="text-red-500 text-sm mt-1 min-h-[1.25rem]">
-//     {error || "\u00A0"}
-//   </p>
-// </div>
 
-  <div className="mb-5">
+    <div className="mb-5">
       {label && (
         <label htmlFor={name} className="block text-sm font-medium text-gray-700 mb-1">
           {label}

@@ -1,14 +1,14 @@
-"use client";
+'use client';
 
 import React from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
+import toast from "react-hot-toast";
 
 import Input from "../input/page"; // ajuste o caminho
-import { api } from "@/lib/api";
-import toast from "react-hot-toast";
+import { registerUser } from "@/app/actions"; // caminho para seu arquivo actions.ts
 
 const schema = z
   .object({
@@ -36,21 +36,25 @@ export function RegisterForm() {
   const router = useRouter();
 
   const onSubmit = async (data: RegisterFormData) => {
-    try {
-      const response = await api.post("/api/register", {
-        name: data.name,
-        email: data.email,
-        password: data.password,
-      });
+    const formData = new FormData();
+    formData.append("name", data.name);
+    formData.append("email", data.email);
+    formData.append("password", data.password);
 
-      if (response.status === 200 || response.status === 201) {
-        toast.success("Usuário criado com sucesso");
-        router.push("/login");
+    const result = await registerUser(formData);
+
+    if (result?.success) {
+      toast.success("Usuário criado com sucesso");
+      router.push("/login");
+    } else {
+      const errors = result?.error;
+      if (errors) {
+        const firstError = Object.values(errors).flat()[0];
+        console.log('firstError',firstError)
+        toast.error(String(firstError) || "Erro ao criar usuário");
       } else {
-        toast.error("Erro ao criar usuário");
+        toast.error("Erro desconhecido");
       }
-    } catch (error: any) {
-      toast.error(error?.response?.data?.error);
     }
   };
 

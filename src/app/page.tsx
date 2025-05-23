@@ -1,10 +1,31 @@
+import Card from "@/components/card/page";
 import Footer from "@/components/footer/page";
-import Header from "@/components/header/page";
+import { Cards } from "@/types";
 import { Banknote, RotateCcw, Send } from "lucide-react";
-import Image from "next/image";
 import Link from "next/link";
 
 export default function Home() {
+
+  const items: Cards[] = [
+    {
+      title: "Depósitos Fáceis",
+      description: "Adicione saldo à sua conta de forma rápida e segura.",
+      icon: <Banknote className="h-8 w-8 text-green-600" />,
+    },
+    {
+      title: "Transferências Instantâneas",
+      description: "Envie dinheiro para outros usuários em segundos.",
+      icon: <Send className="h-8 w-8 text-green-600" />,
+    },
+    {
+      title: "Depósitos Fáceis",
+      description: "Reverta transações em caso de erros ou inconsistências.",
+      icon: <RotateCcw className="h-8 w-8 text-green-600" />,
+    },
+  ];
+
+
+
   return (
     <div className="flex flex-col min-h-screen">
 
@@ -76,7 +97,7 @@ export default function Home() {
             <div className="flex flex-col items-center justify-center space-y-6 text-center">
               <div className="space-y-3">
                 <h2 className="text-4xl font-bold tracking-tight sm:text-5xl">
-                  Recursos Principais
+                  Reversão de Operações
                 </h2>
                 <p className="max-w-[900px] text-gray-600 md:text-xl">
                   Nossa plataforma oferece tudo o que você precisa para gerenciar suas finanças.
@@ -86,38 +107,10 @@ export default function Home() {
 
 
             <div className="mx-auto grid max-w-6xl grid-cols-1 gap-8 py-12 md:grid-cols-3">
-              {/* Card 1 */}
-              <div className="flex flex-col items-center space-y-3 rounded-2xl bg-white p-6 shadow-md hover:shadow-lg transition-all">
-                <div className="rounded-full bg-green-100 p-4">
-                  <Banknote className="h-8 w-8 text-green-600" />
-                </div>
-                <h3 className="text-xl font-semibold">Depósitos Fáceis</h3>
-                <p className="text-center text-gray-500">
-                  Adicione saldo à sua conta de forma rápida e segura.
-                </p>
-              </div>
 
-              {/* Card 2 */}
-              <div className="flex flex-col items-center space-y-3 rounded-2xl bg-white p-6 shadow-md hover:shadow-lg transition-all">
-                <div className="rounded-full bg-green-100 p-4">
-                  <Send className="h-8 w-8 text-green-600" />
-                </div>
-                <h3 className="text-xl font-semibold">Transferências Instantâneas</h3>
-                <p className="text-center text-gray-500">
-                  Envie dinheiro para outros usuários em segundos.
-                </p>
-              </div>
-
-              {/* Card 3 */}
-              <div className="flex flex-col items-center space-y-3 rounded-2xl bg-white p-6 shadow-md hover:shadow-lg transition-all">
-                <div className="rounded-full bg-green-100 p-4">
-                  <RotateCcw className="h-8 w-8 text-green-600" />
-                </div>
-                <h3 className="text-xl font-semibold">Reversão de Operações</h3>
-                <p className="text-center text-gray-500">
-                  Reverta transações em caso de erros ou inconsistências.
-                </p>
-              </div>
+              {items.map((card,index) => (
+                <Card key={index} icon={card.icon} title={card.title} description={card.description} />
+              ))}
             </div>
 
           </div>

@@ -1,20 +1,9 @@
 "use client"
 
-import { signOut, useSession } from "next-auth/react";
+import { DashboardHeaderProps } from "@/types"
 
-interface DashboardHeaderProps {
-    heading: string
-    text?: string
-    // children?: React.ReactNode
-}
 
 export default function HeaderDashBoard({ heading, text }: DashboardHeaderProps) {
-
-    const {status, data} = useSession();
-
-    async function logout() {
-        await signOut();
-    }
 
     return (
         <div className="flex items-start justify-between px-2 flex-col gap-2 flex-wrap">

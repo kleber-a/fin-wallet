@@ -10,7 +10,8 @@ import { redirect } from "next/navigation";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
 
-// Schema de validação
+import { depositAction } from "@/app/actions";
+
 const schema = z.object({
   amount: z
     .number({ invalid_type_error: "O valor deve ser um número válido." })
@@ -25,7 +26,7 @@ const schema = z.object({
 type FormData = z.infer<typeof schema>;
 
 export default function DepositForm({ user }: { user: any }) {
-    const router = useRouter();
+  const router = useRouter();
   const {
     register,
     handleSubmit,
@@ -40,22 +41,28 @@ export default function DepositForm({ user }: { user: any }) {
   });
 
   const [isLoading, setIsLoading] = useState(false);
-  
+
 
   const onSubmit = async (data: FormData) => {
     setIsLoading(true);
-    try {
-      await api.post("/api/deposit", {
-        email: user.email,
-        amount: data.amount,
-        description: data.description,
-      });
 
-      toast.success("Depósito efetuado!");
-      reset();
-      router.push("/dashboard");
+    const formData = new FormData();
+    formData.append("email", user.email);
+    formData.append("amount", String(data.amount));
+    formData.append("description", data.description ?? "");
+
+    try {
+      const result = await depositAction(formData);
+      setIsLoading(true);
+
+      if (result.success) {
+        toast.success("Depósito efetuado!");
+        reset();
+        router.push("/dashboard");
+      } else {
+        toast.error("Não foi possível fazer o depósito");
+      }
     } catch (error) {
-      console.error("Erro ao fazer depósito:", error);
       toast.error("Ocorreu um erro ao tentar depositar.");
     } finally {
       setIsLoading(false);
@@ -89,9 +96,8 @@ export default function DepositForm({ user }: { user: any }) {
       <button
         type="submit"
         disabled={isLoading}
-        className={`w-full ${
-          isLoading ? "bg-gray-400 cursor-not-allowed" : "bg-green-600 hover:bg-green-700"
-        } text-white py-2 rounded transition`}
+        className={`w-full ${isLoading ? "bg-gray-400 cursor-not-allowed" : "bg-green-600 hover:bg-green-700"
+          } text-white py-2 rounded transition`}
       >
         {isLoading ? "Processando..." : "Depositar"}
       </button>

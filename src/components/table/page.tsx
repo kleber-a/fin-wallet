@@ -1,21 +1,11 @@
 "use client";
 
 import { api } from "@/lib/api";
+import { Transaction } from "@/types";
 import { ArrowDown, ArrowUp, Loader2, RotateCcw } from "lucide-react";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 
-
-interface Transaction {
-  _id: string;
-  type: string;
-  from: string | null;
-  to: string;
-  amount: number;
-  description: string;
-  status: string;
-  createdAt: Date;
-}
 
 export default function Table({ user, qtd }: { user: any; qtd?: number }) {
   const [data, setData] = useState<Transaction[]>([]);
@@ -46,19 +36,16 @@ export default function Table({ user, qtd }: { user: any; qtd?: number }) {
     const confirm = window.confirm("Tem certeza que deseja estornar essa transação?");
     if (!confirm) return;
     setLoading(true);
-    console.log('transactionId', transactionId)
     try {
       const response = await api.post("/api/reverse", {
         transactionId: transactionId
       }
       );
       const responseGet = await api.get(`/api/history`);
-      console.log('response', response)
       setData(responseGet?.data?.history || []);
       toast.success("Estorno realizado com sucesso!");
 
     } catch (error) {
-      console.error("Erro ao estornar:", error);
       toast.error("Erro ao estornar.");
     } finally {
       setLoading(false);

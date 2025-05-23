@@ -6,8 +6,10 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { getUser } from "@/services/userService";
 import { api } from "@/lib/api";
-import { Loader2, SplinePointerIcon } from "lucide-react";
 import toast from "react-hot-toast";
+import Loading from "../loading/page";
+import { User } from '@/types/index'
+
 
 export const createTransferSchema = (saldoDisponivel: number) =>
     z.object({
@@ -31,14 +33,6 @@ export const createTransferSchema = (saldoDisponivel: number) =>
 const transferSchema = createTransferSchema(0);
 
 type TransferFormData = z.infer<typeof transferSchema>;
-
-
-interface User {
-    email: string;
-    name: string;
-    wallet: number;
-    _id: string;
-}
 
 export default function TransferForm({ user }: { user: any }) {
 
@@ -77,7 +71,7 @@ export default function TransferForm({ user }: { user: any }) {
     });
 
     const onSubmit = async (data: TransferFormData) => {
-        toast(`Transferindo R$ ${data.valor} para ${data.destinatario}${data.descricao}`);
+        toast(`Transferindo R$ ${data.valor} para ${data.destinatario} ${data.descricao ? `"${data.descricao}"`: ""}`);
 
         setLoading(true);
         try {
@@ -88,7 +82,6 @@ export default function TransferForm({ user }: { user: any }) {
             });
 
 
-            // Busca o usuário atualizado
             const updatedUserResponse = await getUser(user.email);
             setMyUser(updatedUserResponse?.user);
 
@@ -106,9 +99,7 @@ export default function TransferForm({ user }: { user: any }) {
 
     if (loading) {
         return (
-            <div className="flex justify-center items-center h-48">
-                <Loader2 className="animate-spin text-amber-400 w-12 h-12" />
-            </div>
+           <Loading />
         );
     }
 
@@ -117,7 +108,6 @@ export default function TransferForm({ user }: { user: any }) {
             onSubmit={handleSubmit(onSubmit)}
             className="w-[100px] min-w-[320px] sm:w-[400px] max-w-md mx-auto rounded-md border p-6 shadow-md bg-white"
         >
-            {/* Destinatário */}
             <label htmlFor="destinatario" className="block mb-2 font-medium">
                 Destinatário
             </label>
@@ -144,11 +134,9 @@ export default function TransferForm({ user }: { user: any }) {
                         </option>
                     ))}
             </select>
-            {/* Espaço reservado para mensagem de erro */}
             <p className="text-red-500 text-sm min-h-[1.25rem]">
                 {errors.destinatario ? errors.destinatario.message : "\u00A0"}
             </p>
-            {/* Valor da Transferência */}
             <Input
                 label="Valor da Transferência (R$)"
                 type="text"
@@ -159,7 +147,6 @@ export default function TransferForm({ user }: { user: any }) {
                 rules={{ required: true }}
             />
 
-            {/* Descrição (opcional) */}
             <Input
                 label="Descrição (opcional)"
                 type="text"
@@ -170,7 +157,6 @@ export default function TransferForm({ user }: { user: any }) {
                 rules={{ maxLength: 100 }}
             />
 
-            {/* Botão Transferir */}
             <button
                 type="submit"
                 className="w-full rounded bg-green-600 py-2 font-semibold text-white hover:bg-green-700 transition"
@@ -178,7 +164,6 @@ export default function TransferForm({ user }: { user: any }) {
                 Transferir
             </button>
 
-            {/* Saldo Disponível */}
             <p className="mt-4 text-center text-gray-600">
                 Saldo Disponível:{" "}
                 <span className="font-bold text-green-700">

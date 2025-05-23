@@ -1,4 +1,3 @@
-import DashboardNav from "@/components/dashboard-nav/page";
 import HeaderDashBoard from "@/components/header-dashboard/page";
 import Table from "@/components/table/page";
 import { authOptions } from "@/lib/auth";

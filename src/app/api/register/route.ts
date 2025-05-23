@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import client from '@/modules/mongodb';
 import bcrypt from 'bcrypt';
-import { Decimal128, Long } from "mongodb";
+import { Long } from "mongodb";
 
 export async function POST(request: Request) {
   try {
@@ -15,17 +15,14 @@ export async function POST(request: Request) {
     const db = client.db("bankOffice");
     const usersCollection = db.collection("users");
 
-    // Verifica se o email já existe
     const existingUser = await usersCollection.findOne({ email });
     if (existingUser) {
       return NextResponse.json({ error: "Email já cadastrado" }, { status: 409 });
     }
 
-    // Faz o hash da senha
     const saltRounds = 10;
     const hashedPassword = await bcrypt.hash(password, saltRounds);
 
-    // Cria o usuário com wallet inicial 0.00 (Decimal128)
     const newUser = {
       name,
       email,

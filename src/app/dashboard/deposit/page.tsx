@@ -1,4 +1,3 @@
-import DashboardNav from "@/components/dashboard-nav/page";
 import DepositForm from "@/components/deposit-form/page";
 import HeaderDashBoard from "@/components/header-dashboard/page";
 import { authOptions } from "@/lib/auth";

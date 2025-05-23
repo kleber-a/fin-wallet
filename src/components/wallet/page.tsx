@@ -1,6 +1,5 @@
 "use client";
 
-import axios from "axios";
 import { useEffect, useState } from "react";
 import { Loader2 } from "lucide-react";
 import { getUser } from "@/services/userService";
@@ -41,7 +40,7 @@ export default function Wallet({ user }: { user: any }) {
         {loading ? (
           <Loader2 className="animate-spin text-amber-400 w-8 h-8" />
         ) : myUser?.wallet !== undefined ? (
-          `R$ ${formatCurrency(myUser.wallet)}`
+          `${formatCurrency(myUser.wallet)}`
         ) : (
           <span className="text-gray-400 text-base">Nenhum saldo disponível</span>
         )}

@@ -1,10 +1,8 @@
 import ActionButtons from "@/components/action-buttons/page";
-import DashboardNav from "@/components/dashboard-nav/page";
 import HeaderDashBoard from "@/components/header-dashboard/page";
 import Table from "@/components/table/page";
 import Wallet from "@/components/wallet/page";
 import { authOptions } from '@/lib/auth'
-import axios from "axios";
 
 import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
@@ -19,7 +17,6 @@ export default async function DashBoard() {
 
 
     return (
-        // <DashboardNav>
         <div className="w-full flex flex-col gap-10">
 
             <HeaderDashBoard heading="Dashboard" text="Bem-vindo de volta, Usuário Demo!" />
@@ -33,6 +30,5 @@ export default async function DashBoard() {
                 </div>
             </div>
         </div>
-        // </DashboardNav>
     )
 }

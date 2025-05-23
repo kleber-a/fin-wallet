@@ -1,38 +1,44 @@
 "use client"
 
-import { getSession, signIn, useSession } from "next-auth/react";
+import { getSession, signIn } from "next-auth/react";
 import { useState } from "react";
+import Loading from "../loading/page";
+import toast from "react-hot-toast";
+import { useRouter } from 'next/navigation';
 
 
 export default function LoginForm() {
-
-    const { status, data } = useSession();
-
-   const [email, setEmail] = useState('');
+    const router = useRouter();
+    const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [loading, setLoading] = useState(false);
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        // console.warn('submint')
+        setLoading(true);
 
         const res = await signIn('credentials', {
             redirect: false,
             email,
             password,
         });
-
-        console.warn('res',res)
         if (res?.error) {
-            console.log('Erro:', res.error);
-            alert('Email ou senha inválidos');
+            toast.error('Email ou senha inválidos');
+            setLoading(false);
         } else {
-            console.log('Sucesso', res);
-            console.log('test',   email,
-            password,);
-             await getSession();
-            window.location.href = '/dashboard'; // Redirecionar manualmente
+            await getSession();
+            toast.success('Sucesso')
+            router.push('/dashboard')
+            setLoading(false);
         }
     };
+
+    if (loading) {
+        return (
+            <Loading />
+        )
+    }
+
 
     return (
         <form className="space-y-4" onSubmit={handleSubmit}>
@@ -44,7 +50,7 @@ export default function LoginForm() {
                 onChange={(e) => setEmail(e.target.value)}
             />
 
-            <input   
+            <input
                 type="password"
                 placeholder="Senha"
                 value={password}

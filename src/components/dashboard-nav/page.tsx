@@ -11,45 +11,44 @@ import { ReactNode, useState } from "react";
 // import { LayoutDashboard, ArrowRightLeft, PiggyBank, History, Settings, Wallet } from "lucide-react";
 
 interface DashboardNavProps {
-    children: React.ReactNode;
+  children: React.ReactNode;
 }
 
 interface NavItem {
-    title: string;
-    href: string;
-    icon?: React.ReactNode;
+  title: string;
+  href: string;
+  icon?: React.ReactNode;
 }
 
 
 export default function DashboardNav() {
-    const pathname = usePathname();
-     const items: NavItem[] = [
-       {
-         title: "Dashboard",
-         href: "/dashboard",
-         icon: <LayoutDashboard className="mr-2 h-4 w-4" />,
-       },
-       {
-         title: "Transferir",
-         href: "/dashboard/transfer",
-         icon: <ArrowRightLeft className="mr-2 h-4 w-4" />,
-       },
-       {
-         title: "Depositar",
-         href: "/dashboard/deposit",
-         icon: <PiggyBank className="mr-2 h-4 w-4" />,
-       },
-       {
-         title: "Histórico",
-         href: "/dashboard/history",
-         icon: <History className="mr-2 h-4 w-4" />,
-       }
-     ];
-   
+  const pathname = usePathname();
+  const items: NavItem[] = [
+    {
+      title: "Dashboard",
+      href: "/dashboard",
+      icon: <LayoutDashboard className="mr-2 h-4 w-4" />,
+    },
+    {
+      title: "Transferir",
+      href: "/dashboard/transfer",
+      icon: <ArrowRightLeft className="mr-2 h-4 w-4" />,
+    },
+    {
+      title: "Depositar",
+      href: "/dashboard/deposit",
+      icon: <PiggyBank className="mr-2 h-4 w-4" />,
+    },
+    {
+      title: "Histórico",
+      href: "/dashboard/history",
+      icon: <History className="mr-2 h-4 w-4" />,
+    }
+  ];
+
 
   return (
-
-      <nav className="flex-1  space-y-2 overflow-y-auto">
+    <nav className="flex-1  space-y-2 overflow-y-auto">
       {items.map((item) => {
         const isActive = pathname === item.href;
         return (
