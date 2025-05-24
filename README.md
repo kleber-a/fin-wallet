@@ -2,6 +2,16 @@
 
 Uma aplicação de carteira financeira desenvolvida com **Next.js** e **TypeScript**, onde usuários podem realizar operações como **depósito**, **transferência** e **reversão de transações**. O projeto foi desenvolvido como parte de um desafio técnico, focando em boas práticas, arquitetura escalável e segurança.
 
+### 💻 Demonstração
+
+
+
+https://github.com/user-attachments/assets/c85efde6-8e71-4bf4-b3d8-eccff5359f22
+
+
+
+
+
 ## 🚀 Tecnologias utilizadas
 
 - [Next.js](https://nextjs.org/) — Front-end e API (Fullstack)
@@ -9,8 +19,8 @@ Uma aplicação de carteira financeira desenvolvida com **Next.js** e **TypeScri
 - [MongoDB](https://www.mongodb.com/) — Banco de dados NoSQL
 - [Zod](https://zod.dev/) — Validação de dados
 - [NextAuth](https://next-auth.js.org/) — Autenticação
-- [Docker](https://www.docker.com/) — Ambiente containerizado (Diferencial)
-- [Jest](https://jestjs.io/) — Testes unitários e de integração (Diferencial)
+- [Docker](https://www.docker.com/) — Ambiente containerizado
+- [Jest](https://jestjs.io/) — Testes unitários e de integração
 
 ## 🎯 Funcionalidades
 
@@ -153,4 +163,3 @@ Sinta-se à vontade para abrir uma issue ou fazer um pull request.
 ### 📝 Licença
 Este projeto está sob a licença MIT.
 
-### 💻 Demonstração
