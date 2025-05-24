@@ -5,6 +5,7 @@ import { Transaction } from "@/types";
 import { ArrowDown, ArrowUp, Loader2, RotateCcw } from "lucide-react";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
+import Loading from "../loading/page";
 
 
 export default function Table({ user, qtd }: { user: any; qtd?: number }) {
@@ -54,9 +55,7 @@ export default function Table({ user, qtd }: { user: any; qtd?: number }) {
 
   if (loading) {
     return (
-      <div className="flex justify-center items-center h-48">
-        <Loader2 className="animate-spin text-amber-400 w-12 h-12" />
-      </div>
+      <Loading />
     );
   }
 

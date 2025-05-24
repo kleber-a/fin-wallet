@@ -1,6 +1,5 @@
 import { NextResponse } from "next/server";
 import client from '@/modules/mongodb';
-import jwt from "jsonwebtoken";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 

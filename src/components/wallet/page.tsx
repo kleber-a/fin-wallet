@@ -23,7 +23,8 @@ export default function Wallet({ user }: { user: any }) {
         setMyUser(walletData?.user);
         setLoading(false);
       } catch (error) {
-        setMyUser({ wallet: 'Error' })
+        setMyUser({ wallet: null });
+      } finally {
         setLoading(false);
       }
 
@@ -38,8 +39,8 @@ export default function Wallet({ user }: { user: any }) {
 
       <div className="mt-2 text-4xl font-bold text-green-600 min-h-[48px] flex items-center justify-center">
         {loading ? (
-          <Loader2 className="animate-spin text-amber-400 w-8 h-8" />
-        ) : myUser?.wallet !== undefined ? (
+          <Loader2 data-testid="loader-icon" className="animate-spin text-amber-400 w-8 h-8" />
+        ) : myUser?.wallet != null ? (
           `${formatCurrency(myUser.wallet)}`
         ) : (
           <span className="text-gray-400 text-base">Nenhum saldo disponível</span>

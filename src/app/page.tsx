@@ -30,11 +30,11 @@ export default function Home() {
     <div className="flex flex-col min-h-screen">
 
       <main className="flex-1">
-        {/* Hero Section */}
+
         <section className="w-full py-16 md:py-28 lg:py-36 xl:py-48 bg-white flex justify-center">
           <div className="container px-4 md:px-6">
             <div className="grid gap-10 lg:grid-cols-2 lg:gap-16">
-              {/* Texto */}
+
               <div className="flex flex-col justify-center space-y-6">
                 <div className="space-y-4">
                   <h1 className="text-4xl font-extrabold tracking-tight sm:text-5xl md:text-6xl">
@@ -58,7 +58,7 @@ export default function Home() {
                 </div>
               </div>
 
-              {/* Card */}
+
               <div className="flex items-center justify-center">
                 <div className="relative w-full max-w-sm">
                   <div className="bg-gradient-to-r from-green-400 to-green-600 rounded-3xl p-8 shadow-2xl">
@@ -91,7 +91,6 @@ export default function Home() {
           </div>
         </section>
 
-        {/* Features Section */}
         <section className="w-full py-16 md:py-24 lg:py-32 bg-gray-50 flex justify-center">
           <div className="container px-4 md:px-6">
             <div className="flex flex-col items-center justify-center space-y-6 text-center">
