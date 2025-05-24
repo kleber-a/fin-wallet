@@ -27,7 +27,7 @@ export async function POST(request: Request) {
       name,
       email,
       password: hashedPassword,
-      wallet: Long.fromNumber(3000),
+      wallet: Long.fromNumber(0),
       createdAt: new Date(),
       updatedAt: new Date(),
     };
@@ -37,7 +37,6 @@ export async function POST(request: Request) {
     return NextResponse.json({ message: "Usuário criado com sucesso", userId: result.insertedId });
 
   } catch (error) {
-    console.error(error);
     return NextResponse.json({ error: "Erro interno" }, { status: 500 });
   }
 }

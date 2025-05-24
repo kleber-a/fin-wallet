@@ -8,10 +8,12 @@ export async function GET(request: Request) {
     const session = await getServerSession(authOptions);
 
     if (!session || !session.user?.email) {
+      console.warn("aqui")
       return NextResponse.json({ error: "Não autorizado" }, { status: 401 });
     }
 
     const userEmail = session.user.email;
+    console.log('email',userEmail)
 
     await client.connect();
     const db = client.db("bankOffice");
@@ -24,6 +26,8 @@ export async function GET(request: Request) {
       .sort({ createdAt: -1 })
       .limit(10)
       .toArray();
+
+      console.warn('history', history)
 
     return NextResponse.json({ history });
 

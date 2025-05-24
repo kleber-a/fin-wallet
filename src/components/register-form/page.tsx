@@ -50,7 +50,6 @@ export function RegisterForm() {
       const errors = result?.error;
       if (errors) {
         const firstError = Object.values(errors).flat()[0];
-        console.log('firstError',firstError)
         toast.error(String(firstError) || "Erro ao criar usuário");
       } else {
         toast.error("Erro desconhecido");

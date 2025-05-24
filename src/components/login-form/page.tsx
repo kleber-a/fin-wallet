@@ -17,8 +17,6 @@ export default function LoginForm() {
         e.preventDefault();
         setLoading(true);
 
-        console.log('email',email)
-        console.log('password',password)
 
         const res = await signIn('credentials', {
             redirect: false,

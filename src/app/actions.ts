@@ -55,23 +55,19 @@ export async function depositAction(formData: FormData) {
     description: formData.get("description") as string | null,
   };
 
-  console.log('data', data)
 
   const parsed = depositSchema.safeParse(data);
-  console.log('paserd', parsed)
   if (!parsed.success) {
     return { error: parsed.error.flatten().fieldErrors };
   }
 
   try {
-    console.log('tryyyyy')
     const res = await api.post('/api/deposit', parsed.data);
     return {
       success: true,
       message: 'Depósito efetuado com sucesso!',
     };
   } catch (error: any) {
-    console.log('catch')
     if (error.response && error.response.data && error.response.data.error) {
       // Espera que error.response.data.error seja um objeto { server: [mensagem] }
       return { error: error.response.data.error };

@@ -24,7 +24,6 @@ export const authOptions: AuthOptions = {
 
         const isValid = await compare(password, user.password);
         if (!isValid) return null;
-        console.log('userrr',user)
         return {
           id: user._id.toString(),
           email: user.email,

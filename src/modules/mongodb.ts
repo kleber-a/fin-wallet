@@ -1,7 +1,6 @@
 import { MongoClient, ServerApiVersion } from "mongodb";
 
 if (!process.env.MONGO_DB_URI) {
-    console.log('process', process.env.MONGO_DB_URI)
     throw new Error("MONGODB Connection string not defined")
 }
 
