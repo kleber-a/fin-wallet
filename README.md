@@ -76,8 +76,16 @@ docker-compose up --build
 npm install
 ```
 
-2. Configure variáveis de ambiente:
-Crie um arquivo .env
+2. 🔐 Configuração do ambiente
+
+Crie um arquivo `.env` na raiz do projeto com as seguintes variáveis:
+
+```env
+NODE_ENV=development
+MONGO_DB_URI=your_mongodb_uri
+BASE_URL=http://localhost:3000
+NEXTAUTH_SECRET=your_nextauth_secret
+```
 
 3. Inicie o projeto
 
@@ -92,6 +100,35 @@ npm run dev
 
 ### 🧪 Testes
 ![image](https://github.com/user-attachments/assets/1287fbca-3b20-4115-8bca-d1f909b3607e)
+
+
+### 🗄️ Estrutura do Banco de Dados (MongoDB)
+O banco de dados utilizado é o MongoDB, organizado em coleções (collections) que armazenam os documentos relacionados aos usuários e às transações.
+
+#### 📦 Collections e Suas Estruturas
+**🔐 users**
+Armazena os dados dos usuários registrados no sistema.
+
+Campo	Tipo	Descrição
+_id	ObjectId	ID único do MongoDB
+name	String	Nome do usuário
+email	String	E-mail (único)
+password	String	Hash da senha (se aplicável)
+balance	Number	Saldo atual da conta
+createdAt	Date	Data de criação
+updatedAt	Date	Última atualização
+
+**💰 transactions**
+Armazena os registros de depósitos, transferências e reversões.
+
+Campo	Tipo	Descrição
+_id	ObjectId	ID único da transação
+type	String	Tipo da transação (deposit, transfer, reverse)
+amount	Number	Valor da transação
+fromUserId	ObjectId	ID do usuário que enviou (null no depósito)
+toUserId	ObjectId	ID do usuário que recebeu
+status	String	completed ou reversed
+createdAt	Date	Data de criação
 
 
 ### 📑 Documentação API
