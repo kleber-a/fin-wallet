@@ -49,8 +49,7 @@ Uma aplicação de carteira financeira desenvolvida com **Next.js** e **TypeScri
 - Logs de operações críticas
 - Código limpo e modularizado
 
-
-2. 🔐 Configuração do ambiente
+### 🔐 Configuração do ambiente
 
 Crie um arquivo `.env` na raiz do projeto com as seguintes variáveis:
 
@@ -61,11 +60,16 @@ BASE_URL=http://localhost:3000
 NEXTAUTH_SECRET=your_nextauth_secret
 ```
 
+
 ## 🐳 Docker
 
 O projeto é totalmente containerizado.
 
 ### ⚙️ Como rodar com Docker
+
+```bash
+git clone https://github.com/kleber-a/fin-wallet.git
+```
 
 ```bash
 docker build -t fin-wallet .
@@ -77,7 +81,9 @@ docker-compose up
 
 ### Alternativa sem Docker
 
-1. Instale dependências:
+```bash
+git clone https://github.com/kleber-a/fin-wallet.git
+```
 
 ```bash
 npm install
@@ -96,30 +102,27 @@ npm run dev
 ### 🗄️ Estrutura do Banco de Dados (MongoDB)
 O banco de dados utilizado é o MongoDB, organizado em coleções (collections) que armazenam os documentos relacionados aos usuários e às transações.
 
-#### 📦 Collections e Suas Estruturas
-**🔐 users**
-Armazena os dados dos usuários registrados no sistema.
+#### 📦 Collections e Estruturas
 
-Campo	Tipo	Descrição
-_id	ObjectId	ID único do MongoDB
-name	String	Nome do usuário
-email	String	E-mail (único)
-password	String	Hash da senha (se aplicável)
-balance	Number	Saldo atual da conta
-createdAt	Date	Data de criação
-updatedAt	Date	Última atualização
+| Campo       | Tipo      | Descrição                             |
+| ----------- | --------- | ----------------------------------- |
+| **users**   |           |                                     |
+| _id         | ObjectId  | ID único do MongoDB                  |
+| name        | String    | Nome do usuário                     |
+| email       | String    | E-mail (único)                     |
+| password    | String    | Hash da senha (se aplicável)        |
+| wallet     | Number    | Saldo atual da conta                 |
+| createdAt   | Date      | Data de criação                     |
+| updatedAt   | Date      | Última atualização                  |
 
-**💰 transactions**
-Armazena os registros de depósitos, transferências e reversões.
-
-Campo	Tipo	Descrição
-_id	ObjectId	ID único da transação
-type	String	Tipo da transação (deposit, transfer, reverse)
-amount	Number	Valor da transação
-fromUserId	ObjectId	ID do usuário que enviou (null no depósito)
-toUserId	ObjectId	ID do usuário que recebeu
-status	String	completed ou reversed
-createdAt	Date	Data de criação
+| **transactions** |         |                                     |
+| _id             | ObjectId | ID único da transação               |
+| type            | String   | Tipo da transação (deposit, transfer, reverse) |
+| amount          | Number   | Valor da transação                  |
+| from            | String | Email do usuário que enviou (null no depósito) |
+| to       | ObjectId | Email do usuário que recebeu          |
+| status          | String   | Concluída, Falhou ou Revertida              |
+| createdAt       | Date     | Data de criação                    |
 
 
 ### 📑 Documentação API
