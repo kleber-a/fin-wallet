@@ -2,12 +2,11 @@
  * @jest-environment node
  */
 
-import { POST } from "@/app/api/reverse/route"; // ajuste o caminho conforme o seu projeto
+import { POST } from "@/app/api/reverse/route";
 import { NextRequest } from "next/server";
 import { getServerSession } from "next-auth/next";
 import { ObjectId } from "mongodb";
 
-// Mock do MongoDB
 jest.mock('@/modules/mongodb', () => ({
     __esModule: true,
     default: {
@@ -28,7 +27,6 @@ jest.mock('@/modules/mongodb', () => ({
     },
 }));
 
-// Mock do NextAuth
 jest.mock("next-auth/next", () => ({
     getServerSession: jest.fn(),
 }));
@@ -43,7 +41,7 @@ describe('POST /api/reverse', () => {
         jest.clearAllMocks();
     });
 
-    it('should reverse a transaction successfully', async () => {
+    it('deve reverter uma transação com sucesso', async () => {
         (getServerSession as jest.Mock).mockResolvedValue({
             user: { email: userEmail },
         });
@@ -59,8 +57,8 @@ describe('POST /api/reverse', () => {
 
         const usersCollectionMock = {
             findOne: jest.fn()
-                .mockResolvedValueOnce({ email: userEmail, wallet: 500 }) // sender
-                .mockResolvedValueOnce({ email: 'receiver@example.com', wallet: 500 }), // receiver
+                .mockResolvedValueOnce({ email: userEmail, wallet: 500 })
+                .mockResolvedValueOnce({ email: 'receiver@example.com', wallet: 500 }),
             updateOne: jest.fn().mockResolvedValue({}),
         };
 
@@ -86,7 +84,7 @@ describe('POST /api/reverse', () => {
 
         const req = new NextRequest('http://localhost', {
             method: 'POST',
-            body: JSON.stringify({ transactionId, description: 'Reversal test' }),
+            body: JSON.stringify({ transactionId, description: 'Teste de reversão' }),
         });
 
         const res = await POST(req);
@@ -94,10 +92,9 @@ describe('POST /api/reverse', () => {
 
         expect(res.status).toBe(404);
         expect(json.message).toBe(undefined);
-
     });
 
-    it('should return 401 if not authenticated', async () => {
+    it('deve retornar 401 se não estiver autenticado', async () => {
         (getServerSession as jest.Mock).mockResolvedValue(null);
 
         const req = new NextRequest('http://localhost', {
@@ -112,7 +109,7 @@ describe('POST /api/reverse', () => {
         expect(json.error).toBe('Não autorizado');
     });
 
-    it('should return 404 if transaction not found', async () => {
+    it('deve retornar 404 se a transação não for encontrada', async () => {
         (getServerSession as jest.Mock).mockResolvedValue({
             user: { email: userEmail },
         });
@@ -133,12 +130,12 @@ describe('POST /api/reverse', () => {
         expect(json.error).toBe('Transação não encontrada');
     });
 
-    it('should handle internal server error', async () => {
+    it('deve lidar com erro interno do servidor', async () => {
         (getServerSession as jest.Mock).mockResolvedValue({
             user: { email: userEmail },
         });
 
-        (client.connect as jest.Mock).mockRejectedValueOnce(new Error('DB error'));
+        (client.connect as jest.Mock).mockRejectedValueOnce(new Error('Erro no banco'));
 
         const req = new NextRequest('http://localhost', {
             method: 'POST',

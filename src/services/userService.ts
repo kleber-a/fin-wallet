@@ -10,7 +10,6 @@ export async function getUser(email: string) {
 
     return { user, users };
   } catch (error) {
-    console.error("Erro ao buscar usuários:", error);
     return null;
   }
 }

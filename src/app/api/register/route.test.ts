@@ -2,11 +2,10 @@
  * @jest-environment node
  */
 
-import { POST } from "@/app/api/register/route"; // ajuste o caminho conforme seu projeto
+import { POST } from "@/app/api/register/route";
 import { NextRequest } from "next/server";
 import bcrypt from "bcrypt";
 
-// Mock do client do MongoDB
 jest.mock('@/modules/mongodb', () => {
   return {
     __esModule: true,
@@ -27,7 +26,6 @@ jest.mock('@/modules/mongodb', () => {
   };
 });
 
-// Mock do bcrypt
 jest.mock('bcrypt', () => ({
   hash: jest.fn(() => 'hashed_password'),
 }));
@@ -45,8 +43,7 @@ describe('POST /api/register', () => {
     jest.clearAllMocks();
   });
 
-  it('should create user successfully', async () => {
-    // Arrange
+  it('deve criar usuário com sucesso', async () => {
     (client.db().collection as jest.Mock).mockImplementation((name: string) => {
       if (name === 'users') {
         return {
@@ -63,17 +60,15 @@ describe('POST /api/register', () => {
       headers: { 'Content-Type': 'application/json' },
     });
 
-    // Act
     const res = await POST(req);
     const json = await res.json();
 
-    // Assert
     expect(res.status).toBe(500);
     expect(json.message).toBe(undefined);
     expect(json.userId).toBe(undefined);
   });
 
-  it('should return 400 for missing data', async () => {
+  it('deve retornar 400 para dados incompletos', async () => {
     const req = new NextRequest('http://localhost', {
       method: 'POST',
       body: JSON.stringify({ email: 'test@example.com' }),
@@ -87,31 +82,7 @@ describe('POST /api/register', () => {
     expect(json.error).toBe('Dados incompletos');
   });
 
-//   it('should return 409 if user already exists', async () => {
-//     (client.db().collection as jest.Mock).mockImplementation((name: string) => {
-//       if (name === 'users') {
-//         return {
-//           findOne: jest.fn().mockResolvedValue({ email: userData.email }),
-//           insertOne: jest.fn(),
-//         };
-//       }
-//       return {};
-//     });
-
-//     const req = new NextRequest('http://localhost', {
-//       method: 'POST',
-//       body: JSON.stringify(userData),
-//       headers: { 'Content-Type': 'application/json' },
-//     });
-
-//     const res = await POST(req);
-//     const json = await res.json();
-
-//     expect(res.status).toBe(409);
-//     expect(json.error).toBe('Email já cadastrado');
-//   });
-
-  it('should handle internal error gracefully', async () => {
+  it('deve lidar com erro interno de forma adequada', async () => {
     (client.connect as jest.Mock).mockRejectedValueOnce(new Error('connection error'));
 
     const req = new NextRequest('http://localhost', {

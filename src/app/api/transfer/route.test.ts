@@ -2,11 +2,10 @@
  * @jest-environment node
  */
 
-import { POST } from "@/app/api/transfer/route"; // ajuste o caminho conforme seu projeto
+import { POST } from "@/app/api/transfer/route";
 import { NextRequest } from "next/server";
 import { getServerSession } from "next-auth/next";
 
-// Mock do client do MongoDB
 jest.mock('@/modules/mongodb', () => {
     return {
         __esModule: true,
@@ -29,7 +28,6 @@ jest.mock('@/modules/mongodb', () => {
     };
 });
 
-// Mock do NextAuth
 jest.mock("next-auth/next", () => ({
     getServerSession: jest.fn(),
 }));
@@ -37,42 +35,42 @@ jest.mock("next-auth/next", () => ({
 import client from "@/modules/mongodb";
 
 describe('POST /api/transfer', () => {
-    const userEmail = 'sender@example.com';
-    const receiverEmail = 'receiver@example.com';
+    const emailRemetente = 'sender@example.com';
+    const emailDestinatario = 'receiver@example.com';
 
     beforeEach(() => {
         jest.clearAllMocks();
     });
 
-    it('should transfer successfully', async () => {
+    it('deve transferir com sucesso', async () => {
         (getServerSession as jest.Mock).mockResolvedValue({
-            user: { email: userEmail }
+            user: { email: emailRemetente }
         });
 
-        const mockUsers = {
+        const usuariosMock = {
             findOne: jest.fn()
-                .mockResolvedValueOnce({ email: userEmail, wallet: 500 }) // Sender
-                .mockResolvedValueOnce({ email: receiverEmail, wallet: 200 }), // Receiver
+                .mockResolvedValueOnce({ email: emailRemetente, wallet: 500 })
+                .mockResolvedValueOnce({ email: emailDestinatario, wallet: 200 }),
             updateOne: jest.fn().mockResolvedValue({}),
             insertOne: jest.fn().mockResolvedValue({}),
         };
 
-        (client.db().collection as jest.Mock).mockReturnValue(mockUsers);
+        (client.db().collection as jest.Mock).mockReturnValue(usuariosMock);
 
-        const mockSession = {
+        const sessaoMock = {
             startTransaction: jest.fn(),
             commitTransaction: jest.fn(),
             abortTransaction: jest.fn(),
             endSession: jest.fn(),
         };
-        (client.startSession as jest.Mock).mockReturnValue(mockSession);
+        (client.startSession as jest.Mock).mockReturnValue(sessaoMock);
 
         const req = new NextRequest('http://localhost', {
             method: 'POST',
             body: JSON.stringify({
-                toEmail: receiverEmail,
+                toEmail: emailDestinatario,
                 amount: 100,
-                description: 'Test transfer',
+                description: 'Transferência de teste',
             }),
         });
 
@@ -83,12 +81,12 @@ describe('POST /api/transfer', () => {
         expect(json.message).toBe(undefined);
     });
 
-    it('should return 401 if not authenticated', async () => {
+    it('deve retornar 401 se não estiver autenticado', async () => {
         (getServerSession as jest.Mock).mockResolvedValue(null);
 
         const req = new NextRequest('http://localhost', {
             method: 'POST',
-            body: JSON.stringify({ toEmail: receiverEmail, amount: 100 }),
+            body: JSON.stringify({ toEmail: emailDestinatario, amount: 100 }),
         });
 
         const res = await POST(req);
@@ -98,9 +96,9 @@ describe('POST /api/transfer', () => {
         expect(json.error).toBe("Não autorizado");
     });
 
-    it('should return 400 if toEmail is missing', async () => {
+    it('deve retornar 400 se faltar o email do destinatário', async () => {
         (getServerSession as jest.Mock).mockResolvedValue({
-            user: { email: userEmail }
+            user: { email: emailRemetente }
         });
 
         const req = new NextRequest('http://localhost', {
@@ -115,14 +113,14 @@ describe('POST /api/transfer', () => {
         expect(json.error).toBe("Email do destinatário é obrigatório");
     });
 
-    it('should return 400 if amount is invalid', async () => {
+    it('deve retornar 400 se o valor for inválido', async () => {
         (getServerSession as jest.Mock).mockResolvedValue({
-            user: { email: userEmail }
+            user: { email: emailRemetente }
         });
 
         const req = new NextRequest('http://localhost', {
             method: 'POST',
-            body: JSON.stringify({ toEmail: receiverEmail, amount: -50 }),
+            body: JSON.stringify({ toEmail: emailDestinatario, amount: -50 }),
         });
 
         const res = await POST(req);
@@ -132,23 +130,23 @@ describe('POST /api/transfer', () => {
         expect(json.error).toBe("Valor inválido para amount");
     });
 
-    it('should return 404 if sender not found', async () => {
+    it('deve retornar 404 se remetente não encontrado', async () => {
         (getServerSession as jest.Mock).mockResolvedValue({
-            user: { email: userEmail }
+            user: { email: emailRemetente }
         });
 
-        const mockUsers = {
+        const usuariosMock = {
             findOne: jest.fn()
-                .mockResolvedValueOnce(null), // Sender not found
+                .mockResolvedValueOnce(null),
             updateOne: jest.fn(),
             insertOne: jest.fn(),
         };
 
-        (client.db().collection as jest.Mock).mockReturnValue(mockUsers);
+        (client.db().collection as jest.Mock).mockReturnValue(usuariosMock);
 
         const req = new NextRequest('http://localhost', {
             method: 'POST',
-            body: JSON.stringify({ toEmail: receiverEmail, amount: 100 }),
+            body: JSON.stringify({ toEmail: emailDestinatario, amount: 100 }),
         });
 
         const res = await POST(req);
@@ -158,24 +156,24 @@ describe('POST /api/transfer', () => {
         expect(json.error).toBe("Remetente não encontrado");
     });
 
-    it('should return 404 if receiver not found', async () => {
+    it('deve retornar 404 se destinatário não encontrado', async () => {
         (getServerSession as jest.Mock).mockResolvedValue({
-            user: { email: userEmail }
+            user: { email: emailRemetente }
         });
 
-        const mockUsers = {
+        const usuariosMock = {
             findOne: jest.fn()
-                .mockResolvedValueOnce({ email: userEmail, wallet: 500 }) // Sender
-                .mockResolvedValueOnce(null), // Receiver not found
+                .mockResolvedValueOnce({ email: emailRemetente, wallet: 500 })
+                .mockResolvedValueOnce(null),
             updateOne: jest.fn(),
             insertOne: jest.fn(),
         };
 
-        (client.db().collection as jest.Mock).mockReturnValue(mockUsers);
+        (client.db().collection as jest.Mock).mockReturnValue(usuariosMock);
 
         const req = new NextRequest('http://localhost', {
             method: 'POST',
-            body: JSON.stringify({ toEmail: receiverEmail, amount: 100 }),
+            body: JSON.stringify({ toEmail: emailDestinatario, amount: 100 }),
         });
 
         const res = await POST(req);
@@ -185,24 +183,24 @@ describe('POST /api/transfer', () => {
         expect(json.error).toBe("Remetente não encontrado");
     });
 
-    it('should return 400 if insufficient funds', async () => {
+    it('deve retornar 400 se saldo insuficiente', async () => {
         (getServerSession as jest.Mock).mockResolvedValue({
-            user: { email: userEmail }
+            user: { email: emailRemetente }
         });
 
-        const mockUsers = {
+        const usuariosMock = {
             findOne: jest.fn()
-                .mockResolvedValueOnce({ email: userEmail, wallet: 50 }) // Sender with low balance
-                .mockResolvedValueOnce({ email: receiverEmail, wallet: 200 }),
+                .mockResolvedValueOnce({ email: emailRemetente, wallet: 50 })
+                .mockResolvedValueOnce({ email: emailDestinatario, wallet: 200 }),
             updateOne: jest.fn(),
             insertOne: jest.fn(),
         };
 
-        (client.db().collection as jest.Mock).mockReturnValue(mockUsers);
+        (client.db().collection as jest.Mock).mockReturnValue(usuariosMock);
 
         const req = new NextRequest('http://localhost', {
             method: 'POST',
-            body: JSON.stringify({ toEmail: receiverEmail, amount: 100 }),
+            body: JSON.stringify({ toEmail: emailDestinatario, amount: 100 }),
         });
 
         const res = await POST(req);
@@ -212,16 +210,16 @@ describe('POST /api/transfer', () => {
         expect(json.error).toBe("Remetente não encontrado");
     });
 
-    it('should handle internal server error', async () => {
+    it('deve tratar erro interno do servidor', async () => {
         (getServerSession as jest.Mock).mockResolvedValue({
-            user: { email: userEmail }
+            user: { email: emailRemetente }
         });
 
-        (client.connect as jest.Mock).mockRejectedValueOnce(new Error('DB error'));
+        (client.connect as jest.Mock).mockRejectedValueOnce(new Error('Erro no banco de dados'));
 
         const req = new NextRequest('http://localhost', {
             method: 'POST',
-            body: JSON.stringify({ toEmail: receiverEmail, amount: 100 }),
+            body: JSON.stringify({ toEmail: emailDestinatario, amount: 100 }),
         });
 
         const res = await POST(req);

@@ -2,11 +2,10 @@
  * @jest-environment node
  */
 
-import { GET } from "@/app/api/history/route"; // ajuste o caminho conforme seu projeto
+import { GET } from "@/app/api/history/route";
 import { NextRequest } from "next/server";
 import { getServerSession } from "next-auth/next";
 
-// Mock do client do MongoDB
 jest.mock('@/modules/mongodb', () => {
     return {
         __esModule: true,
@@ -27,7 +26,6 @@ jest.mock('@/modules/mongodb', () => {
     };
 });
 
-// Mock do NextAuth
 jest.mock("next-auth/next", () => ({
     getServerSession: jest.fn(),
 }));
@@ -41,8 +39,7 @@ describe('GET /api/history', () => {
         jest.clearAllMocks();
     });
 
-    it('should return transaction history successfully', async () => {
-        // Arrange
+    test('deve retornar o histórico de transações com sucesso', async () => {
         (getServerSession as jest.Mock).mockResolvedValue({
             user: { email: userEmail }
         });
@@ -66,19 +63,16 @@ describe('GET /api/history', () => {
 
         const req = new NextRequest('http://localhost', { method: 'GET' });
 
-        // Act
         const res = await GET(req);
         const json = await res.json();
 
-        // Assert
         expect(res.status).toBe(200);
         expect(json.history).toEqual(undefined);
 
-        // Verifica se conectou ao banco
         expect(client.connect).toHaveBeenCalled();
     });
 
-    it('should return 401 if not authenticated', async () => {
+    test('deve retornar 401 se não estiver autenticado', async () => {
         (getServerSession as jest.Mock).mockResolvedValue(null);
 
         const req = new NextRequest('http://localhost', { method: 'GET' });
@@ -90,7 +84,7 @@ describe('GET /api/history', () => {
         expect(json.error).toBe('Não autorizado');
     });
 
-    it('should handle internal server error', async () => {
+    test('deve lidar com erro interno do servidor', async () => {
         (getServerSession as jest.Mock).mockResolvedValue({
             user: { email: userEmail }
         });

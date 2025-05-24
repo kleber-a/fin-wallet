@@ -2,10 +2,9 @@
  * @jest-environment node
  */
 
-import { POST } from "@/app/api/deposit/route"; // ajuste o caminho conforme seu projeto
+import { POST } from "@/app/api/deposit/route";
 import { NextRequest } from "next/server";
 
-// Mock do client do MongoDB para evitar conexão real no teste
 jest.mock('@/modules/mongodb', () => {
     return {
         __esModule: true,
@@ -47,8 +46,7 @@ describe('POST /api/deposit', () => {
         jest.clearAllMocks();
     });
 
-    it('should deposit successfully', async () => {
-        // Arrange mocks
+    test('deve realizar o depósito com sucesso', async () => {
         const mockUser = { email: userEmail, wallet: 100 };
 
         (client.db().collection as jest.Mock).mockImplementation((name: string) => {
@@ -76,7 +74,7 @@ describe('POST /api/deposit', () => {
         const body = {
             email: userEmail,
             amount: depositAmount,
-            description: 'Test deposit',
+            description: 'Depósito de teste',
         };
 
         const req = new NextRequest('http://localhost', {
@@ -85,22 +83,18 @@ describe('POST /api/deposit', () => {
             headers: { 'Content-Type': 'application/json' },
         });
 
-        // Act
         const res = await POST(req);
         const json = await res.json();
 
-        // Assert
         expect(res.status).toBe(404);
         expect(json.message).toBe(undefined);
-
-
     });
 
-    it('should return 400 for invalid amount', async () => {
+    test('deve retornar 400 para valor inválido', async () => {
         const body = {
             email: userEmail,
             amount: -10,
-            description: 'Invalid deposit',
+            description: 'Depósito inválido',
         };
 
         const req = new NextRequest('http://localhost', {
@@ -116,8 +110,7 @@ describe('POST /api/deposit', () => {
         expect(json.error).toBe('Valor inválido para depósito');
     });
 
-    it('should return 404 if user not found', async () => {
-        // users.findOne retorna null
+    test('deve retornar 404 se o usuário não for encontrado', async () => {
         (client.db().collection as jest.Mock).mockImplementation((name: string) => {
             if (name === 'users') {
                 return {
@@ -135,7 +128,7 @@ describe('POST /api/deposit', () => {
         const body = {
             email: 'notfound@example.com',
             amount: 50,
-            description: 'Deposit',
+            description: 'Depósito',
         };
 
         const req = new NextRequest('http://localhost', {
@@ -151,14 +144,13 @@ describe('POST /api/deposit', () => {
         expect(json.error).toBe('Usuário não encontrado');
     });
 
-    it('should handle internal error gracefully', async () => {
-        // Força o connect a lançar erro
+    test('deve lidar com erro interno corretamente', async () => {
         (client.connect as jest.Mock).mockRejectedValueOnce(new Error('connection error'));
 
         const body = {
             email: userEmail,
             amount: depositAmount,
-            description: 'Test deposit',
+            description: 'Depósito de teste',
         };
 
         const req = new NextRequest('http://localhost', {
