@@ -1,6 +1,6 @@
 "use client";
 
-import { api } from "@/lib/api";
+import { api, getHistory, postReverse } from "@/lib/api";
 import { Transaction } from "@/types";
 import { ArrowDown, ArrowUp, Loader2, RotateCcw } from "lucide-react";
 import { useEffect, useState } from "react";
@@ -20,7 +20,7 @@ export default function Table({ user, qtd }: { user: any; qtd?: number }) {
       setLoading(true);
       setError(null);
       try {
-        const response = await api.get(`/api/history`);
+        const response = await getHistory();
         setData(response?.data?.history || []);
       } catch (err: any) {
         setError(err.message || "Erro desconhecido");
@@ -37,8 +37,8 @@ export default function Table({ user, qtd }: { user: any; qtd?: number }) {
   const handleReversal = async (transactionId: string) => {
     setLoading(true);
     try {
-      await api.post("/api/reverse", { transactionId });
-      const responseGet = await api.get(`/api/history`);
+      await postReverse(transactionId)
+      const responseGet = await getHistory();
       setData(responseGet?.data?.history || []);
       toast.success("Estorno realizado com sucesso!");
     } catch (error) {

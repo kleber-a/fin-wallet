@@ -2,7 +2,8 @@
 
 import { useEffect, useState } from "react";
 import { Loader2 } from "lucide-react";
-import { getUser } from "@/services/userService";
+import { getUser } from "@/lib/api";
+
 
 function formatCurrency(value: number) {
   return new Intl.NumberFormat("pt-BR", {
@@ -19,7 +20,7 @@ export default function Wallet({ user }: { user: any }) {
     const requestWallet = async () => {
       try {
         setLoading(true);
-        const walletData = await getUser(user.email);
+        const walletData = await getUser();
         setMyUser(walletData?.user);
         setLoading(false);
       } catch (error) {

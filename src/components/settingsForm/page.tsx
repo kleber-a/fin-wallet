@@ -4,9 +4,9 @@ import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { signOut } from "next-auth/react";
 import Input from "@/components/input/page";
-import { api } from "@/lib/api";
+import { api, deleteUser, getUser, putUser } from "@/lib/api";
 import toast from "react-hot-toast";
-import { getUser } from "@/services/userService";
+
 import { FormData, User } from "@/types";
 import ConfirmDialog from "../confirm-dialog/page";
 
@@ -30,7 +30,7 @@ export default function SettingsForm() {
         const getUsers = async () => {
             try {
                 setLoading(true);
-                const UsersData = await getUser("");
+                const UsersData = await getUser();
                 setMyUser(UsersData?.user);
 
                 reset({ name: UsersData?.user?.name });
@@ -47,22 +47,23 @@ export default function SettingsForm() {
     async function onSubmit(data: FormData) {
         setErrorGlobal("");
         setLoading(true);
+        
         try {
-            await api.put("/api/user", { name: data.name });
+            await putUser(data.name);
             toast.success("Nome atualizado com sucesso!");
             reset({ name: data.name });
-        } catch {
+        } catch (error) {
             toast.error("Erro ao atualizar o nome.");
         } finally {
             setLoading(false);
-        }
+            }
     }
 
     async function handleDeleteAccount() {
         setErrorGlobal("");
         setLoading(true);
         try {
-            await api.delete("/api/user");
+            await deleteUser();
             signOut();
             toast.success("Conta deletada com sucesso")
         } catch {

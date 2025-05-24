@@ -1,11 +1,10 @@
 import React from "react";
 import { render, screen, waitFor, fireEvent } from "@testing-library/react";
 import TransferForm from "./page";
-import { getUser } from "@/services/userService";
+import { getUser } from "@/lib/api";
 import { api } from "@/lib/api";
 import toast from "react-hot-toast";
 
-jest.mock("@/services/userService");
 jest.mock("@/lib/api");
 jest.mock("react-hot-toast", () => ({
   __esModule: true,

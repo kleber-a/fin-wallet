@@ -27,10 +27,8 @@ export async function registerUser(formData: FormData) {
     return { success: true };
   } catch (error: any) {
     if (error.response) {
-      // Resposta com erro vindo do servidor (status !== 2xx)
       return { error: error.response.data };
     } else {
-      // Erro de conexão ou outro problema
       return { error: { server: ['Erro no servidor'] } };
     }
   }
@@ -69,7 +67,6 @@ export async function depositAction(formData: FormData) {
     };
   } catch (error: any) {
     if (error.response && error.response.data && error.response.data.error) {
-      // Espera que error.response.data.error seja um objeto { server: [mensagem] }
       return { error: error.response.data.error };
     } else {
       return { error: { server: ['Erro no servidor'] } };

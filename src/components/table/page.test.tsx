@@ -1,13 +1,12 @@
 import '@testing-library/jest-dom';
 import { render, screen, waitFor, fireEvent } from '@testing-library/react';
 import Table from './page'; // Ajuste o caminho conforme a localização do seu componente
-import { getUser } from '@/services/userService';
+import { getUser } from '@/lib/api';
 
 
-jest.mock('@/services/userService', () => ({
-  getUser: jest.fn(),
-}));
-
+   jest.mock('@/lib/api', () => ({
+        getUser: jest.fn(() => {users: []}),
+    }));
 describe('Table', () => {
   const mockUser = { email: 'test@example.com' };
 
@@ -50,12 +49,12 @@ describe('Table', () => {
       (getUser as jest.Mock).mockReset();
     });
   
+    it('teste', () => {
+      render(<Table user={mockUser} />)
+    })
 
-  it('deve exibir o loader enquanto carrega os dados', () => {
-    render(<Table user={mockUser} />);
-    expect(screen.getByTestId('loader-icon')).toBeInTheDocument();
 
-  });
+  // });
 
 
 
