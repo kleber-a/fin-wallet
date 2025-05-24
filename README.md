@@ -31,12 +31,6 @@ Uma aplicação de carteira financeira desenvolvida com **Next.js** e **TypeScri
 
 - **Next.js App Router + Server Actions**
 - Camada de acesso a dados implementada com MongoDB
-- Separação por camadas:
-  - `app/` → Rotas e componentes visuais
-  - `lib/` → Funções auxiliares e regras de negócio
-  - `services/` → Lógica de negócios (ex.: transações, reversões)
-  - `data/` → Camada responsável por consultas e manipulação no banco
-  - `tests/` → Testes unitários e integração
 
 ## 🔐 Segurança
 
@@ -45,10 +39,6 @@ Uma aplicação de carteira financeira desenvolvida com **Next.js** e **TypeScri
 - Tokens e sessões protegidos contra ataques comuns
 - Validações rigorosas no backend com **Zod**
 - Proteção de rotas e operações sensíveis
-- Prevenção de:
-  - Injeção de comandos no banco (Mongo Injection)
-  - Mass Assignment
-  - Manipulação de saldo indevida
 
 ## 🧠 Padrões e Boas Práticas
 
@@ -59,22 +49,6 @@ Uma aplicação de carteira financeira desenvolvida com **Next.js** e **TypeScri
 - Logs de operações críticas
 - Código limpo e modularizado
 
-## 🐳 Docker
-
-O projeto é totalmente containerizado.
-
-### ⚙️ Como rodar com Docker
-
-```bash
-docker-compose up --build
-```
-### Alternativa sem Docker
-
-1. Instale dependências:
-
-```bash
-npm install
-```
 
 2. 🔐 Configuração do ambiente
 
@@ -87,16 +61,33 @@ BASE_URL=http://localhost:3000
 NEXTAUTH_SECRET=your_nextauth_secret
 ```
 
+## 🐳 Docker
+
+O projeto é totalmente containerizado.
+
+### ⚙️ Como rodar com Docker
+
+```bash
+docker build -t fin-wallet .
+```
+
+```bash
+docker-compose up
+```
+
+### Alternativa sem Docker
+
+1. Instale dependências:
+
+```bash
+npm install
+```
+
 3. Inicie o projeto
 
 ```bash
 npm run dev
 ```
-### 🔧 Scripts Disponíveis
-
-- dev — Rodar aplicação em desenvolvimento
-- build — Build para produção
-- start — Rodar em produção
 
 ### 🧪 Testes
 ![image](https://github.com/user-attachments/assets/1287fbca-3b20-4115-8bca-d1f909b3607e)
@@ -135,12 +126,15 @@ createdAt	Date	Data de criação
 
 | Método | Endpoint             | Descrição                        |
 | ------ | -------------------- | -------------------------------- |
-| POST   | `/api/auth/register` | Cadastro de usuário              |
+| POST   | `/api/register`      | Cadastro de usuário              |
 | POST   | `/api/auth/login`    | Login (gerenciado pelo NextAuth) |
 | POST   | `/api/deposit`       | Realizar depósito                |
 | POST   | `/api/transfer`      | Realizar transferência           |
 | POST   | `/api/reverse`       | Reverter uma operação            |
 | GET    | `/api/transactions`  | Listar histórico de transações   |
+| GET    | `/api/user`          | Listar usuário autenticado e todos usuários   |
+| PUT    | `/api/user`          | Alterar o nome do usuário  |
+| DELETE  | `/api/user`          | Deleta usuário   |
 
 
 ### 🔥 Roadmap de Melhorias
