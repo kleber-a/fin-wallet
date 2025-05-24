@@ -115,14 +115,16 @@ O banco de dados utilizado é o MongoDB, organizado em coleções (collections) 
 | createdAt   | Date      | Data de criação                     |
 | updatedAt   | Date      | Última atualização                  |
 
-| **transactions** |         |                                     |
-| _id             | ObjectId | ID único da transação               |
-| type            | String   | Tipo da transação (deposit, transfer, reverse) |
-| amount          | Number   | Valor da transação                  |
-| from            | String | Email do usuário que enviou (null no depósito) |
-| to       | ObjectId | Email do usuário que recebeu          |
-| status          | String   | Concluída, Falhou ou Revertida              |
-| createdAt       | Date     | Data de criação                    |
+| Campo     | Tipo      | Descrição                                |
+| --------- | --------- | -------------------------------------- |
+| **transactions** |       |                                          |
+| _id       | ObjectId  | ID único da transação                    |
+| type      | String    | Tipo da transação (deposit, transfer, reverse) |
+| amount    | Number    | Valor da transação                       |
+| from      | String    | Email do usuário que enviou (null no depósito) |
+| to        | String    | Email do usuário que recebeu             |
+| status    | String    | Concluída, Falhou ou Revertida          |
+| createdAt | Date      | Data de criação                         |
 
 
 ### 📑 Documentação API
