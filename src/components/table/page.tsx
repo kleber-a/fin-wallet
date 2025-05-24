@@ -115,7 +115,7 @@ export default function Table({ user, qtd }: { user: any; qtd?: number }) {
               <p className="mb-3">
                 <strong className="text-gray-900">Status:</strong>{" "}
                 <span className="inline-block rounded-full bg-green-100 px-3 py-1 text-xs font-semibold text-green-700">
-                  {item.status}
+                  {item.status.replace(".", ",")}
                 </span>
               </p>
 

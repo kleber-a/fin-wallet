@@ -7,7 +7,6 @@ import { useEffect } from "react";
 
 export default function Header() {
   const { data: session } = useSession();
-  console.log('data,',session)
 
   return (
     <header className="px-4 lg:px-6 h-16 flex items-center 

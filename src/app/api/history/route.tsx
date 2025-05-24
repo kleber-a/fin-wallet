@@ -13,7 +13,6 @@ export async function GET(request: Request) {
     }
 
     const userEmail = session.user.email;
-    console.log('email',userEmail)
 
     await client.connect();
     const db = client.db("bankOffice");
