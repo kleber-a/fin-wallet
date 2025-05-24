@@ -3,9 +3,11 @@
 import { Wallet, LogOut, User } from "lucide-react";
 import Link from "next/link";
 import { signOut, useSession } from "next-auth/react";
+import { useEffect } from "react";
 
 export default function Header() {
   const { data: session } = useSession();
+  console.log('data,',session)
 
   return (
     <header className="px-4 lg:px-6 h-16 flex items-center 
@@ -50,7 +52,7 @@ export default function Header() {
             <div className="flex items-center gap-2">
               <User className="h-5 w-5 text-gray-600" />
               <span className="text-sm font-medium text-gray-700">
-                {session.user?.name ?? "Usuário"}
+                {session.user?.email ?? "Usuário"}
               </span>
             </div>
             <button

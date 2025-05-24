@@ -4,7 +4,8 @@ import axios from "axios";
 
 export async function getUser(email: string) {
   try {
-    const response = await api.get("/api/users");
+    const response = await api.get("/api/user");
+    console.log('response',response)
     const user = response.data.userAuthenticated;
     const users = response.data.users;
 

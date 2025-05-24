@@ -2,7 +2,7 @@
  * @jest-environment node
  */
 
-import { GET } from "@/app/api/users/route"; // ajuste o caminho conforme seu projeto
+import { GET } from "@/app/api/user/route"; // ajuste o caminho conforme seu projeto
 import { NextRequest } from "next/server";
 import { getServerSession } from "next-auth/next";
 

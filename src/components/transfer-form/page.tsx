@@ -9,6 +9,7 @@ import { api } from "@/lib/api";
 import toast from "react-hot-toast";
 import Loading from "../loading/page";
 import { User } from '@/types/index'
+import Select from "../select/page";
 
 
 export const createTransferSchema = (saldoDisponivel: number) =>
@@ -71,7 +72,7 @@ export default function TransferForm({ user }: { user: any }) {
     });
 
     const onSubmit = async (data: TransferFormData) => {
-        toast(`Transferindo R$ ${data.valor} para ${data.destinatario} ${data.descricao ? `"${data.descricao}"`: ""}`);
+        toast(`Transferindo R$ ${data.valor} para ${data.destinatario} ${data.descricao ? `"${data.descricao}"` : ""}`);
 
         setLoading(true);
         try {
@@ -99,44 +100,28 @@ export default function TransferForm({ user }: { user: any }) {
 
     if (loading) {
         return (
-           <Loading />
+            <Loading />
         );
     }
 
     return (
         <form
             onSubmit={handleSubmit(onSubmit)}
-            className="w-[100px] min-w-[320px] sm:w-[400px] max-w-md mx-auto rounded-md border p-6 shadow-md bg-white"
+            className="w-[100px] min-w-[320px] sm:w-[400px] max-w-md mx-auto
+                rounded-lg /* Bordas mais suaves: de md para lg */
+                border border-gray-200 /* Borda fina e sutil */
+                p-6 shadow-lg /* Sombra mais destacada: de md para lg */
+                bg-white
+            "
         >
-            <label htmlFor="destinatario" className="block mb-2 font-medium">
-                Destinatário
-            </label>
-            <select
-                id="destinatario"
-                {...register("destinatario")}
-                className={`w-full rounded border px-3 py-2 mb-1 focus:outline-none focus:ring-2 focus:ring-green-500 appearance-none pr-8 relative ${errors.destinatario ? "border-red-500" : ""
-                    }`}
-                style={{
-                    backgroundImage: `url("data:image/svg+xml;utf8,<svg fill='gray' height='24' viewBox='0 0 24 24' width='24' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/></svg>")`,
-                    backgroundRepeat: "no-repeat",
-                    backgroundPosition: "right 0.5rem center",
-                    backgroundSize: "1rem",
-                }}
-                defaultValue=""
-            >
-                <option value="" disabled>
-                    Selecione o destinatário
-                </option>
-                {otherUsers &&
-                    otherUsers.map((d, index) => (
-                        <option key={index} value={d.email}>
-                            {d.email}
-                        </option>
-                    ))}
-            </select>
-            <p className="text-red-500 text-sm min-h-[1.25rem]">
-                {errors.destinatario ? errors.destinatario.message : "\u00A0"}
-            </p>
+            <Select
+                label="Destinatário"
+                name="destinatario"
+                options={otherUsers.map((d) => ({ value: d.email, label: d.email }))}
+                register={register}
+                error={errors.destinatario?.message}
+                rules={{ required: true }}
+            />
             <Input
                 label="Valor da Transferência (R$)"
                 type="text"

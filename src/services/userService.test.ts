@@ -23,7 +23,7 @@ describe("getUser", () => {
 
     const result = await getUser("me@example.com");
 
-    expect(api.get).toHaveBeenCalledWith("/api/users");
+    expect(api.get).toHaveBeenCalledWith("/api/user");
     expect(result).toEqual({
       user: mockResponse.data.userAuthenticated,
       users: mockResponse.data.users,
@@ -36,7 +36,7 @@ describe("getUser", () => {
 
     const result = await getUser("me@example.com");
 
-    expect(api.get).toHaveBeenCalledWith("/api/users");
+    expect(api.get).toHaveBeenCalledWith("/api/user");
     expect(result).toBeNull();
     expect(consoleSpy).toHaveBeenCalledWith(
       "Erro ao buscar usuários:",

@@ -1,6 +1,7 @@
 'use client'
 
 import DashboardNav from "@/components/dashboard-nav/page";
+import { ChevronRight } from "lucide-react";
 import { ReactNode, useState } from "react";
 
 
@@ -13,13 +14,11 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
 
     <div className="flex min-h-screen bg-white">
       <button
-        className="md:hidden p-2 m-2 rounded bg-gray-300 fixed top-2 left-2 z-40"
+        className="md:hidden p-2 m-2 rounded bg-green-500 fixed top-12 left-0 z-40"
         onClick={() => setIsOpen(true)}
         aria-label="Abrir menu"
       >
-        <div className="w-6 h-0.5 bg-gray-700 mb-1"></div>
-        <div className="w-6 h-0.5 bg-gray-700 mb-1"></div>
-        <div className="w-6 h-0.5 bg-gray-700"></div>
+        <ChevronRight className="w-3 h-3 text-gray-700" />
       </button>
 
       <aside
@@ -31,7 +30,7 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
         `}
       >
         <div className="p-4 text-lg font-bold border-b border-gray-300 flex justify-between items-center">
-          Meu App
+          Navegação
           <button
             className="md:hidden p-2 rounded hover:bg-gray-200"
             onClick={() => setIsOpen(false)}
@@ -51,7 +50,7 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
         />
       )}
 
-      <main className="flex-1 p-6 bg-gray-10">
+      <main className="flex-1 p-6 bg-gray-10 overflow-x-hidden">
         {children}
       </main>
     </div>

@@ -4,7 +4,13 @@ import Link from "next/link";
 export default function ActionButtons() {
 
   return (
-    <section className="rounded-md border border-amber-400 bg-white p-4 shadow-sm w-full md:w-auto">
+    <section className="
+      w-full 
+      md:w-auto
+      rounded-lg
+        border border-gray-200 
+        p-6 shadow-lg 
+        bg-white">
       <div className="grid grid-cols-2 gap-4">
         <Link
           href="/dashboard/deposit"

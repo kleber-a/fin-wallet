@@ -11,7 +11,7 @@ describe('DashboardLayout', () => {
       </DashboardLayout>
     );
 
-    expect(screen.getByText('Meu App')).toBeInTheDocument();
+    expect(screen.getByText('Navegação')).toBeInTheDocument();
     expect(screen.getByText('Conteúdo do dashboard')).toBeInTheDocument();
   });
 

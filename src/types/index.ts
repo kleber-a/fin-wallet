@@ -38,3 +38,34 @@ export interface Transaction {
   status: string;
   createdAt: Date;
 }
+
+
+export interface Option {
+  value: string;
+  label: string;
+}
+
+export interface SelectProps {
+  name: string;
+  label?: string;
+  options: Option[];
+  register: any;
+  error?: string;
+  rules?: object;
+  defaultValue?: string;
+}
+
+export type ConfirmDialogProps = {
+  open: boolean;
+  title: string;
+  description: string;
+  onCancel: () => void;
+  onConfirm: () => void;
+  loading?: boolean;
+  confirmText?: string;
+  cancelText?: string;
+};
+
+export type FormData = {
+    name: string;
+};

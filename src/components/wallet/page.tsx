@@ -34,7 +34,13 @@ export default function Wallet({ user }: { user: any }) {
   }, [user.email]);
 
   return (
- <section className="rounded-md border border-amber-400 bg-white p-4 shadow-sm w-full md:w-auto">
+    <section className="
+        w-full 
+        md:w-auto
+        rounded-lg
+        border border-gray-200 
+        p-6 shadow-lg 
+        bg-white">
       <h3 className="text-sm font-medium text-black">Saldo Disponível</h3>
 
       <div className="mt-2 text-4xl font-bold text-green-600 min-h-[48px] flex items-center justify-center">

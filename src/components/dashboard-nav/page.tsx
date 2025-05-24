@@ -1,7 +1,7 @@
 'use client'
 
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@radix-ui/react-dropdown-menu";
-import { ArrowRightLeft, History, LayoutDashboard, LogOut, PiggyBank, Wallet } from "lucide-react";
+import { ArrowRightLeft, History, LayoutDashboard, LogOut, PiggyBank, Settings, Wallet } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useRouter } from "next/navigation";
@@ -43,12 +43,17 @@ export default function DashboardNav() {
       title: "Histórico",
       href: "/dashboard/history",
       icon: <History className="mr-2 h-4 w-4" />,
-    }
+    },
+    {
+    title: "Configurações",
+    href: "/dashboard/settings",
+    icon: <Settings className="mr-2 h-4 w-4" />,
+  }
   ];
 
 
   return (
-    <nav className="flex-1  space-y-2 overflow-y-auto">
+    <nav className="flex-1  space-y-0  overflow-y-auto">
       {items.map((item) => {
         const isActive = pathname === item.href;
         return (
@@ -57,11 +62,11 @@ export default function DashboardNav() {
             href={item.href}
             aria-current={isActive ? "page" : undefined}
             className={`flex items-center  px-4 py-5 text-sm font-medium transition-colors
-              ${isActive
-                ? "bg-green-100 text-green-700 border-l-4 border-green-600"
-                : "text-gray-800 hover:bg-green-700 hover:text-white"}
-            `}
-          >
+               ${isActive
+              ? "bg-green-100 text-green-700 border-l-4 border-green-600"
+              : "text-gray-600 hover:bg-green-600 hover:text-white"}
+                    `}
+                >
             {item.icon}
             {item.title}
           </Link>
