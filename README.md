@@ -140,17 +140,18 @@ O banco de dados utilizado é o MongoDB, organizado em coleções (collections) 
 
 ### 📑 Documentação API
 
-| Método | Endpoint             | Descrição                        |
-| ------ | -------------------- | -------------------------------- |
-| POST   | `/api/register`      | Cadastro de usuário              |
-| POST   | `/api/auth/login`    | Login (gerenciado pelo NextAuth) |
-| POST   | `/api/deposit`       | Realizar depósito                |
-| POST   | `/api/transfer`      | Realizar transferência           |
-| POST   | `/api/reverse`       | Reverter uma operação            |
-| GET    | `/api/transactions`  | Listar histórico de transações   |
-| GET    | `/api/user`          | Listar usuário autenticado e todos usuários   |
-| PUT    | `/api/user`          | Alterar o nome do usuário  |
-| DELETE  | `/api/user`          | Deleta usuário   |
+| Método  | Endpoint             | Descrição                        | Body (JSON)                                              | Campos Obrigatórios                             |
+| ------- | -------------------- | -------------------------------- | -------------------------------------------------------- | ------------------------------------------------ |
+| POST    | `/api/register`      | Cadastro de usuário              | `{ "name": "string", "email": "string", "password": "string" }` | name, email, password                           |
+| POST    | `/api/auth/login`    | Login (gerenciado pelo NextAuth) | `{ "email": "string", "password": "string" }`           | email, password                                  |
+| POST    | `/api/deposit`       | Realizar depósito                | `{ "email": "string", "amount": number, "description": "string" }` | email, amount                       |
+| POST    | `/api/transfer`      | Realizar transferência           | `{ "toEmail": "string", "amount": number, "description": string }` | toEmail, amount                                 |
+| POST    | `/api/reverse`       | Reverter uma operação            | `{ "transactionId": "string" }`                         | transactionId                                    |
+| GET     | `/api/transactions`  | Listar histórico de transações   | —                                                        | —                                                |
+| GET     | `/api/user`          | Listar usuário autenticado e todos usuários | —                                             | —                                                |
+| PUT     | `/api/user`          | Alterar o nome do usuário        | `{ "name": "string" }`                                  | name                                             |
+| DELETE  | `/api/user`          | Deleta usuário                   | —                                                        | —                                                |
+
 
 
 ### 🔥 Roadmap de Melhorias
