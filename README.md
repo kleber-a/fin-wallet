@@ -106,7 +106,8 @@ npm run dev
 ```
 
 ### 🧪 Testes
-![image](https://github.com/user-attachments/assets/1287fbca-3b20-4115-8bca-d1f909b3607e)
+
+![image](https://github.com/user-attachments/assets/e03aa550-5e9c-488c-ab8c-8adef2af6a2c)
 
 
 ### 🗄️ Estrutura do Banco de Dados (MongoDB)
