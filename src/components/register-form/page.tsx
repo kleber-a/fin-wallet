@@ -7,8 +7,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
 
-import Input from "../input/page"; // ajuste o caminho
-import { registerUser } from "@/app/actions"; // caminho para seu arquivo actions.ts
+import Input from "../input/page"; 
+import { registerUser } from "@/app/actions";
 
 const schema = z
   .object({

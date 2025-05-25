@@ -1,15 +1,13 @@
 import '@testing-library/jest-dom';
-import { render, screen, waitFor } from '@testing-library/react'; // Importe 'waitFor'
-import Wallet from './page'; // Ajuste o caminho se necessário
+import { render, screen, waitFor } from '@testing-library/react';
+import Wallet from './page';
 import { getUser } from '@/lib/api';
 
-// Mock da função getUser
 jest.mock('@/lib/api', () => ({
   getUser: jest.fn(),
 }));
 
-// Mock da data para testes consistentes
-const MOCK_DATE = new Date('2025-05-23T10:00:00.000Z'); // Usando um formato que evita problemas de fuso horário
+const MOCK_DATE = new Date('2025-05-23T10:00:00.000Z');
 const realDate = Date;
 global.Date = jest.fn(() => MOCK_DATE) as any;
 global.Date.now = realDate.now;
@@ -35,7 +33,7 @@ describe('Wallet', () => {
 
   });
 
-  // it('deve exibir o saldo disponível após o carregamento bem-sucedido', async () => { // <--- Tornar o teste assíncrono
+  // it('deve exibir o saldo disponível após o carregamento bem-sucedido', async () => {
   //   const mockWalletValue = 1234.56;
   //   (getUser as jest.Mock).mockResolvedValueOnce({
   //     user: { wallet: mockWalletValue },
@@ -52,7 +50,7 @@ describe('Wallet', () => {
   //   expect(getUser).toHaveBeenCalledWith(mockUser.email);
   // });
 
-  it('deve exibir "Nenhum saldo disponível" se a carteira for indefinida ou nula', async () => { // <--- Tornar o teste assíncrono
+  it('deve exibir "Nenhum saldo disponível" se a carteira for indefinida ou nula', async () => {
     (getUser as jest.Mock).mockResolvedValueOnce({ user: { wallet: null } });
 
     render(<Wallet user={mockUser} />);
@@ -63,7 +61,7 @@ describe('Wallet', () => {
     expect(screen.queryByTestId('loader-icon')).not.toBeInTheDocument();
   });
 
-  it('deve exibir "Nenhum saldo disponível" quando a requisição falha', async () => { // <--- Tornar o teste assíncrono
+  it('deve exibir "Nenhum saldo disponível" quando a requisição falha', async () => {
     (getUser as jest.Mock).mockRejectedValueOnce(new Error('Erro na API'));
 
     render(<Wallet user={mockUser} />);
@@ -74,7 +72,7 @@ describe('Wallet', () => {
     expect(screen.queryByTestId('loader-icon')).not.toBeInTheDocument();
   });
 
-  it('deve exibir a data de atualização corretamente', async () => { // <--- Tornar o teste assíncrono
+  it('deve exibir a data de atualização corretamente', async () => {
     const mockWalletValue = 500.00;
     (getUser as jest.Mock).mockResolvedValueOnce({
       user: { wallet: mockWalletValue },

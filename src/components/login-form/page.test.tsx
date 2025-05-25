@@ -1,7 +1,7 @@
 import '@testing-library/jest-dom';
 import React from "react";
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
-import LoginForm from "./page";  // ajuste o caminho conforme seu projeto
+import LoginForm from "./page"; 
 import { signIn, getSession } from "next-auth/react";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";

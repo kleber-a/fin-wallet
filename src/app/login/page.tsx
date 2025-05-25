@@ -35,7 +35,7 @@ export default async function LoginPage() {
             Não tem uma conta?{" "}
             <Link
               href="/register"
-              className="font-semibold text-green-700 hover:text-green-800 transition-colors duration-200" // Cor mais escura no hover
+              className="font-semibold text-green-700 hover:text-green-800 transition-colors duration-200"
             >
               Cadastre-se aqui!
             </Link>

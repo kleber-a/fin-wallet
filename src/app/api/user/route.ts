@@ -26,7 +26,6 @@ export async function GET(request: Request) {
       .toArray();
 
 
-    //
     const userAuthenticated = await bankOffice
     .collection("users")
     .findOne({ email: userEmail }, { projection: { name: 1, email: 1, wallet: 1 } });
@@ -72,7 +71,6 @@ export async function PUT(request: Request) {
   }
 }
 
-// Deletar conta (DELETE)
 export async function DELETE(request: Request) {
   try {
     const session = await getServerSession(authOptions);

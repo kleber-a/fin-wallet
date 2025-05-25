@@ -1,14 +1,9 @@
 'use client'
 
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@radix-ui/react-dropdown-menu";
-import { ArrowRightLeft, History, LayoutDashboard, LogOut, PiggyBank, Settings, Wallet } from "lucide-react";
+import { ArrowRightLeft, History, LayoutDashboard, PiggyBank, Settings } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useRouter } from "next/navigation";
-import { ReactNode, useState } from "react";
-// import { cn } from "@/lib/utils";
-// import { buttonVariants } from "@/components/ui/button";
-// import { LayoutDashboard, ArrowRightLeft, PiggyBank, History, Settings, Wallet } from "lucide-react";
+
 
 interface DashboardNavProps {
   children: React.ReactNode;

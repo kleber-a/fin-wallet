@@ -1,6 +1,6 @@
 import '@testing-library/jest-dom';
 import { render, screen, waitFor, fireEvent } from '@testing-library/react';
-import Table from './page'; // Ajuste o caminho conforme a localização do seu componente
+import Table from './page';
 import { getUser } from '@/lib/api';
 
 
@@ -10,7 +10,6 @@ import { getUser } from '@/lib/api';
 describe('Table', () => {
   const mockUser = { email: 'test@example.com' };
 
-  // Dados de transação mockados para reuso
   const mockTransactions = [
     {
       _id: '1',
@@ -54,7 +53,6 @@ describe('Table', () => {
     })
 
 
-  // });
 
 
 

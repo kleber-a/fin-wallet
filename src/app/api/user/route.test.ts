@@ -2,7 +2,7 @@
  * @jest-environment node
  */
 
-import { GET, PUT, DELETE } from "@/app/api/user/route"; // ajuste o caminho conforme seu projeto
+import { GET, PUT, DELETE } from "@/app/api/user/route";
 import { NextRequest } from "next/server";
 import { getServerSession } from "next-auth/next";
 
@@ -32,7 +32,6 @@ jest.mock("next-auth/next", () => ({
 
 import client from "@/modules/mongodb";
 
-// ======== TESTES GET /api/history ========
 describe('GET /api/history', () => {
   const userEmail = 'test@example.com';
 
@@ -63,7 +62,7 @@ describe('GET /api/history', () => {
     const res = await GET(req);
     const json = await res.json();
 
-    // Atenção: o status 500 pode estar incorreto, ajustar conforme implementação real
+  
     expect(res.status).toBe(500);
     expect(json.history).toBeUndefined();
   });
@@ -81,41 +80,12 @@ describe('GET /api/history', () => {
   });
 });
 
-// ======== TESTES PUT /api/user ========
 describe('PUT /api/user', () => {
   const userEmail = 'test@example.com';
 
   beforeEach(() => {
     jest.clearAllMocks();
   });
-
-  // Teste comentado — descomente e ajuste se desejar testar atualização com sucesso
-  /*
-  it('deve atualizar o nome com sucesso', async () => {
-    (getServerSession as jest.Mock).mockResolvedValue({ user: { email: userEmail } });
-
-    const updateOneMock = jest.fn().mockResolvedValue({ matchedCount: 1 });
-
-    (client.db().collection as jest.Mock).mockReturnValue({
-      updateOne: updateOneMock,
-    });
-
-    const req = new NextRequest('http://localhost', {
-      method: 'PUT',
-      body: JSON.stringify({ name: "Novo Nome" }),
-    });
-
-    const res = await PUT(req);
-    const json = await res.json();
-
-    expect(res.status).toBe(200);
-    expect(json.message).toBe("Nome atualizado com sucesso");
-    expect(updateOneMock).toHaveBeenCalledWith(
-      { email: userEmail },
-      { $set: { name: "Novo Nome" } }
-    );
-  });
-  */
 
   it('deve retornar 401 se não estiver autenticado', async () => {
     (getServerSession as jest.Mock).mockResolvedValue(null);

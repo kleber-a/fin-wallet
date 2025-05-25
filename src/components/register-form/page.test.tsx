@@ -1,7 +1,7 @@
 import '@testing-library/jest-dom';
 import React from "react";
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
-import { RegisterForm } from "./page"; // ajuste caminho
+import { RegisterForm } from "./page";
 import { registerUser } from "@/app/actions";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";

@@ -1,7 +1,7 @@
 import '@testing-library/jest-dom';
 import React from "react";
 import { render, screen, fireEvent, waitFor, act } from "@testing-library/react";
-import DepositForm from "./page"; // ajuste o caminho
+import DepositForm from "./page";
 import { depositAction } from "@/app/actions";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
@@ -51,9 +51,6 @@ describe("DepositForm", () => {
             fireEvent.change(screen.getByLabelText(/valor do depósito/i), { target: { value: "0" } });
             fireEvent.click(screen.getByRole("button", { name: /depositar/i }));
         });
-
-        // Aqui você pode adicionar expect para mensagem de erro visível se quiser:
-        // expect(await screen.findByText(/O valor é obrigatório/i)).toBeInTheDocument();
 
         expect(depositAction).not.toHaveBeenCalled();
     });

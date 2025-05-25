@@ -1,4 +1,4 @@
-import { registerUser, depositAction } from "./actions"; // ajuste o caminho do arquivo
+import { registerUser, depositAction } from "./actions";
 import { api } from "@/lib/api";
 
 jest.mock("@/lib/api");
@@ -28,7 +28,7 @@ describe("registerUser", () => {
 
   it("deve retornar erros de validação quando dados inválidos", async () => {
     const formData = new FormData();
-    formData.append("name", "Jo"); // <3 caracteres
+    formData.append("name", "Jo");
     formData.append("email", "not-an-email");
     formData.append("password", "123");
 
@@ -97,7 +97,7 @@ describe("depositAction", () => {
   it("deve retornar erro de validação se amount inválido", async () => {
     const formData = new FormData();
     formData.append("email", "kleber@example.com");
-    formData.append("amount", "0"); // valor inválido
+    formData.append("amount", "0");
     formData.append("description", "Depósito teste");
 
     const result = await depositAction(formData);

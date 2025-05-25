@@ -24,7 +24,7 @@ describe('DashboardLayout', () => {
 
     const openButton = screen.getByLabelText('Abrir menu');
 
-    const aside = screen.getByRole('complementary'); // <aside>
+    const aside = screen.getByRole('complementary');
     expect(aside).toHaveClass('-translate-x-full');
 
     fireEvent.click(openButton);

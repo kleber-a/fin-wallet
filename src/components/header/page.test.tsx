@@ -3,7 +3,6 @@ import { render, screen, fireEvent } from '@testing-library/react';
 import { SessionProvider, signOut } from 'next-auth/react';
 import Header from './page';
 
-// Mock da função signOut
 jest.mock('next-auth/react', () => {
   const originalModule = jest.requireActual('next-auth/react');
   return {
