@@ -39,7 +39,7 @@ describe('GET /api/history', () => {
         jest.clearAllMocks();
     });
 
-    test('deve retornar o histórico de transações com sucesso', async () => {
+    it('deve retornar o histórico de transações com sucesso', async () => {
         (getServerSession as jest.Mock).mockResolvedValue({
             user: { email: userEmail }
         });
@@ -72,7 +72,7 @@ describe('GET /api/history', () => {
         expect(client.connect).toHaveBeenCalled();
     });
 
-    test('deve retornar 401 se não estiver autenticado', async () => {
+    it('deve retornar 401 se não estiver autenticado', async () => {
         (getServerSession as jest.Mock).mockResolvedValue(null);
 
         const req = new NextRequest('http://localhost', { method: 'GET' });
@@ -84,7 +84,7 @@ describe('GET /api/history', () => {
         expect(json.error).toBe('Não autorizado');
     });
 
-    test('deve lidar com erro interno do servidor', async () => {
+    it('deve lidar com erro interno do servidor', async () => {
         (getServerSession as jest.Mock).mockResolvedValue({
             user: { email: userEmail }
         });
